@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-import { Input, Container, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Tfoot, HStack, Box, Text, Image } from '@chakra-ui/react';
+import { Heading, Input, Container, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Tfoot, HStack, Box, Text, Image } from '@chakra-ui/react';
 
 const MarketTable = () => {
   const [ marketData, setMarketData ] = useState([])
@@ -12,16 +12,16 @@ const MarketTable = () => {
       const { data } = await axios.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd')
 
       setMarketData(data)
-      console.log(data)
+      // console.log(data)
     }
 
     fetchData()
 
-    const interval = setInterval(() => {
-      fetchData()
-    }, 30000)
+    // const interval = setInterval(() => {
+    //   fetchData()
+    // }, 30000)
 
-    return () => clearInterval()
+    // return () => clearInterval()
     
   }, [])
 
@@ -37,6 +37,9 @@ const MarketTable = () => {
   return (
     <>
     <Container>
+        <Heading as='h2'size='md' mb={6} textAlign='center'> 
+          Top 100 Cryptocurrencies
+        </Heading>
       <Input variant='filled' placeholder='Search' mb={8} onChange={handleChange} value={search} />
     </Container>
     <TableContainer>
@@ -44,10 +47,7 @@ const MarketTable = () => {
         <Thead>
           <Tr>
             <Th isNumeric>#</Th>
-            <Th>
-              <Image />
-              Name
-            </Th>
+            <Th>Name</Th>
             <Th isNumeric>Price</Th>
             <Th isNumeric>24h %</Th>
             <Th isNumeric>Market Cap</Th>
