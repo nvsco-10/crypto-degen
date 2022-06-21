@@ -64,7 +64,7 @@ const NavBar = () => {
         {/* logo  */}
         <Box w='100px'>
           {/* <Image src={logo} alt='asian grub dfw' /> */}
-          logo
+          CryptoTrades
         </Box>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
@@ -139,7 +139,7 @@ export default NavBar
 const DesktopNav = () => {
   const linkColor = useColorModeValue('gray.600', 'gray.200');
   const linkHoverColor = useColorModeValue('gray.800', 'white');
-  
+
   return (
     <Stack direction={'row'} spacing={4}>
       {NAV_ITEMS.map((navItem) => (

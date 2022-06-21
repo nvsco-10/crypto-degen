@@ -3,14 +3,16 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 // import `ChakraProvider` component
 import { ChakraProvider } from '@chakra-ui/react'
 import theme from './utils/theme.js'
-import { NavBar } from './components'
+import { SharedLayout, Home } from './pages'
 
 function App() {
   return (
     <ChakraProvider theme={theme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<NavBar/>} />
+          <Route path="/" element={<SharedLayout/>} >
+            <Route index element={<Home/>} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
