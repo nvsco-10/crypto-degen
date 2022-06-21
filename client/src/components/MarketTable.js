@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-import { Heading, Input, Container, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Tfoot, HStack, Box, Text, Image } from '@chakra-ui/react';
+import { Heading, Center, Input, Container, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Tfoot, HStack, Box, Text, Image } from '@chakra-ui/react';
 
 const MarketTable = () => {
   const [ marketData, setMarketData ] = useState([])
@@ -37,10 +37,21 @@ const MarketTable = () => {
   return (
     <>
     <Container>
-        <Heading as='h2'size='md' mb={6} textAlign='center'> 
-          Top 100 Cryptocurrencies
-        </Heading>
-      <Input variant='filled' placeholder='Search' mb={8} onChange={handleChange} value={search} />
+      <Heading as='h2'size='md' textAlign='center'> 
+        Top 100 Cryptocurrencies
+      </Heading>
+      <Center>
+        <Text as='i' fontSize='xs'>
+          *real-time data from CoinGecko API
+        </Text>
+      </Center>
+      <Input 
+        variant='filled' 
+        placeholder='Search' 
+        mt={6} mb={8} 
+        onChange={handleChange} 
+        value={search} 
+      />
     </Container>
     <TableContainer>
       <Table size='sm'>

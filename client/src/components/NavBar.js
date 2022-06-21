@@ -31,6 +31,8 @@ import {
   CloseIcon,
 } from '@chakra-ui/icons';
 
+import navItems from '../utils/navItems.js'
+
 const NavBar = () => {
   const { isOpen, onToggle } = useDisclosure();
   const [ isLoggedIn, setIsLoggedIn ] = useState(false)
@@ -142,7 +144,7 @@ const DesktopNav = () => {
 
   return (
     <Stack direction={'row'} spacing={4}>
-      {NAV_ITEMS.map((navItem) => (
+      {navItems.map((navItem) => (
         <Box key={navItem.label}>
           <Popover trigger={'hover'} placement={'bottom-start'}>
             <PopoverTrigger>
@@ -173,7 +175,7 @@ const MobileNav = () => {
       bg={useColorModeValue('white', 'gray.800')}
       p={6}
       display={{ md: 'none' }}>
-      {NAV_ITEMS.map((navItem) => (
+      {navItems.map((navItem) => (
         <MobileNavItem key={navItem.label} {...navItem} />
       ))}
     </Stack>
@@ -206,19 +208,3 @@ const MobileNavItem = ({ label, href }) => {
 
 
 
-const NAV_ITEMS = [
-  {
-    label: 'Home',
-  },
-  // {
-  //   label: 'Stories',
-  // },
-  {
-    label: 'Portfolio',
-    href: '#',
-  },
-  // {
-  //   label: 'Hire Designers',
-  //   href: '#',
-  // },
-];

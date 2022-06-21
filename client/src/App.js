@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 // import `ChakraProvider` component
 import { ChakraProvider } from '@chakra-ui/react'
 import theme from './utils/theme.js'
-import { SharedLayout, Home } from './pages'
+import { SharedLayout, Home, Simulator } from './pages'
 
 function App() {
   return (
@@ -12,6 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<SharedLayout/>} >
             <Route index element={<Home/>} />
+            <Route path="trade-simulator" element={<Simulator/>} />
           </Route>
         </Routes>
       </BrowserRouter>

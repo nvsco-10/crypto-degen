@@ -3,6 +3,7 @@ import { MarketTable, TrendingTable } from '../components'
 import { 
   Container,
   SimpleGrid,
+  Text,
   Flex,
   Box,
   HStack
@@ -22,7 +23,7 @@ const Home = () => {
             <TrendingTable/>
         </Flex>
       </Container>
-      <Container maxW='7xl'>
+      <Container maxW='7xl' pt={4}>
         <MarketTable/>
       </Container>
     </>
