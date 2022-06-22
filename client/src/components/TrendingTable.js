@@ -28,10 +28,10 @@ const TrendingTable = () => {
 
 
   return (
-    <TableContainer minW='400'>
+    <TableContainer>
       <Box display='flex'>
         <ImFire style={{color: 'orange'}}/>
-        <Heading as='h3'size='sm' mb={4} ml={2}> 
+        <Heading as='h3'size={'sm'} mb={4} ml={2}> 
           Trending
         </Heading>
       </Box>
@@ -40,7 +40,7 @@ const TrendingTable = () => {
           <Tr>
             <Th>Name</Th>
             <Th>Symbol</Th>
-            <Th>Rank</Th>
+            <Th isNumeric>Rank</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -53,7 +53,7 @@ const TrendingTable = () => {
                   <HStack spacing='24px'>
                     <Image
                       borderRadius='full'
-                      boxSize='30px'
+                      boxSize={{xs: '20px', lg: '30px'}}
                       src={item.thumb}
                       alt={item.name}
                     />
@@ -62,7 +62,7 @@ const TrendingTable = () => {
                     </Box>
                   </HStack>
                 </Td>
-                <Td>{item.symbol}</Td>
+                <Td fontWeight={600}>{item.symbol}</Td>
                 <Td isNumeric>{item.market_cap_rank}</Td>
               </Tr>
               )

@@ -62,7 +62,7 @@ const MarketTable = () => {
         <Thead>
           <Tr>
             <Th></Th>
-            <Th isNumeric>#</Th>
+            <Th pl={0} isNumeric>#</Th>
             <Th>Name</Th>
             <Th isNumeric>Price</Th>
             <Th isNumeric>24h %</Th>
@@ -78,20 +78,21 @@ const MarketTable = () => {
             filteredData?.map(item => {
               return (
               <Tr key={item.id}>
-                <Td m='0'>
+                <Td padding={0}>
                   <IconButton
                     variant='transparent'
                     // color='green'
                     icon={<AiOutlineStar/>}
+                    boxSize='10px'
                     onClick={() => updateWatchlist(item.id)}
                   />
                 </Td>
-                <Td isNumeric>{item.market_cap_rank}</Td>
+                <Td pl={0} isNumeric>{item.market_cap_rank}</Td>
                 <Td>
                   <HStack spacing='24px'>
                     <Image
                       borderRadius='full'
-                      boxSize='30px'
+                      boxSize={{xs: '20px', lg: '30px'}}
                       src={item.image}
                       alt={item.name}
                     />
