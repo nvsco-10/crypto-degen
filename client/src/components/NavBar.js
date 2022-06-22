@@ -1,4 +1,6 @@
 import { useState } from 'react' 
+import logo from '../assets/images/logo.png'
+import logolight from '../assets/images/logo-light.png'
 
 // Chakra imports
 import {
@@ -24,11 +26,15 @@ import {
   PopoverContent,
   useColorModeValue,
   useBreakpointValue,
+  useColorMode,
   useDisclosure,
 } from '@chakra-ui/react';
+
 import {
   HamburgerIcon,
   CloseIcon,
+  MoonIcon, 
+  SunIcon
 } from '@chakra-ui/icons';
 
 import navItems from '../utils/navItems.js'
@@ -36,6 +42,7 @@ import navItems from '../utils/navItems.js'
 const NavBar = () => {
   const { isOpen, onToggle } = useDisclosure();
   const [ isLoggedIn, setIsLoggedIn ] = useState(false)
+  const { colorMode, toggleColorMode } = useColorMode()
 
   return (
     <Box>
@@ -64,12 +71,10 @@ const NavBar = () => {
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
         {/* logo  */}
-        <Box w='100px'>
-          {/* <Image src={logo} alt='asian grub dfw' /> */}
-          CryptoDegen
-        </Box>
-
-          <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
+          <Box w='80px'>
+            <Image src={ colorMode === 'light' ? logo : logolight } alt='crypto degen' />
+          </Box>
+          <Flex display={{ base: 'none', md: 'flex' }} alignItems='center' ml={10}>
             <DesktopNav />
           </Flex>
         </Flex>
@@ -79,25 +84,18 @@ const NavBar = () => {
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
-          { !isLoggedIn ? (
+
+          {/* { !isLoggedIn ? (
             <>
-          <Button
-            as={'a'}
-            fontSize={'sm'}
-            fontWeight={400}
-            variant={'link'}
-            href={'#'}>
-            Sign In
-          </Button>
           <Button
             display={{ base: 'none', md: 'inline-flex' }}
             fontSize={'sm'}
             fontWeight={600}
             color={'white'}
-            bg={'pink.400'}
+            bg={'blue.400'}
             href={'#'}
             _hover={{
-              bg: 'pink.300',
+              bg: 'blue.300',
             }}>
             Sign Up
           </Button>
@@ -125,7 +123,11 @@ const NavBar = () => {
               </MenuList>
             </Menu>
           )
-            }
+            } */}
+
+          <Button onClick={toggleColorMode}>
+            {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+          </Button>
         </Stack>
       </Flex>
 
@@ -145,24 +147,24 @@ const DesktopNav = () => {
   return (
     <Stack direction={'row'} spacing={4}>
       {navItems.map((navItem) => (
-        <Box key={navItem.label}>
-          <Popover trigger={'hover'} placement={'bottom-start'}>
-            <PopoverTrigger>
-              <Link
-                p={2}
-                href={navItem.href ?? '#'}
-                fontSize={'sm'}
-                fontWeight={500}
-                color={linkColor}
-                _hover={{
-                  textDecoration: 'none',
-                  color: linkHoverColor,
-                }}>
-                {navItem.label}
-              </Link>
-            </PopoverTrigger>
-
-          </Popover>
+        <Box key={navItem.label} display='flex' alignItems='center'>
+          <Link
+            p={2}
+            href={navItem.href ?? '#'}
+            fontSize={'sm'}
+            fontWeight={600}
+            color={linkColor}
+            _hover={{
+              textDecoration: 'none',
+              color: linkHoverColor,
+            }}>
+            {navItem.label}
+          </Link>
+          { navItem.span && (
+            <Text as='i' fontSize={10} textColor='center'>
+            *{navItem.span}
+          </Text>
+          )}
         </Box>
       ))}
     </Stack>

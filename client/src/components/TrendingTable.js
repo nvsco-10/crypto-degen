@@ -1,34 +1,26 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useAppContext } from '../context/appContext';
 
-import { Heading, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Tfoot, HStack, Box, Text, Image } from '@chakra-ui/react';
+import { 
+  Heading, 
+  TableContainer, 
+  Table, 
+  Thead, 
+  Tr, 
+  Th, 
+  Tbody, 
+  Td, 
+  HStack, 
+  Box, 
+  Image, 
+} from '@chakra-ui/react';
 
 import { ImFire } from 'react-icons/im'
 
 const TrendingTable = () => {
-  const [ marketData, setMarketData ] = useState([])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await axios.get('https://api.coingecko.com/api/v3/search/trending')
-
-      setMarketData(data.coins)
-      // console.log(data.coins)
-    }
-
-    fetchData()
-
-    // const interval = setInterval(() => {
-    //   fetchData()
-    // }, 30000)
-
-    // return () => clearInterval()
-    
-  }, [])
-
+  const { trendingData } = useAppContext()
 
   return (
-    <TableContainer>
+    <TableContainer minWidth={300}>
       <Box display='flex'>
         <ImFire style={{color: 'orange'}}/>
         <Heading as='h3'size={'sm'} mb={4} ml={2}> 
@@ -44,8 +36,8 @@ const TrendingTable = () => {
           </Tr>
         </Thead>
         <Tbody>
-          { marketData.length > 0 ? (
-            marketData.map(data => {
+          {trendingData.length > 0 && (
+            trendingData.map(data => {
               const { item } = data
               return (
               <Tr key={item.id}>
@@ -62,15 +54,11 @@ const TrendingTable = () => {
                     </Box>
                   </HStack>
                 </Td>
-                <Td fontWeight={600}>{item.symbol}</Td>
+                <Td fontWeight={600} fontSize='xs'>{item.symbol}</Td>
                 <Td isNumeric>{item.market_cap_rank}</Td>
               </Tr>
               )
             })
-          ) : (
-            <Tr>
-              <Td>Loading...</Td>
-            </Tr>
           )}
         </Tbody>
         {/* <Tfoot>

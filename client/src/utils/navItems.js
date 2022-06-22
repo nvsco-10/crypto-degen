@@ -4,8 +4,9 @@ const navItems = [
     href: '/',
   },
   {
-    label: 'Simulator',
-    href: '/trade-simulator',
+    label: 'Trade Simulator',
+    span: 'coming soon',
+    // href: '/trade-simulator',
   },
 ];
 

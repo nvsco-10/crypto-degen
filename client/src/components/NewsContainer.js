@@ -1,8 +1,12 @@
-import {useEffect} from 'react'
-import axios from 'axios'
 import News from './News';
 
-import { Container, VStack, Box, StackDivider, Heading, Text, Image } from '@chakra-ui/react';
+import { 
+  VStack, 
+  Box, 
+  StackDivider, 
+  Heading, 
+  Text 
+} from '@chakra-ui/react';
 
 import mockData from '../utils/mockData'
 
@@ -14,11 +18,14 @@ const NewsContainer = () => {
       spacing={4}
       align='stretch'
     >
-      <Box display='flex'>
+      <Box display='flex' flexDirection='column'>
         {/* <ImFire style={{color: 'orange'}}/> */}
         <Heading as='h3'size='sm'> 
           Latest News
         </Heading>
+        <Text as='i' fontSize='xs'>
+          *mock news data
+        </Text>
       </Box>
      { mockData ? (
       mockData?.data.map(article => {

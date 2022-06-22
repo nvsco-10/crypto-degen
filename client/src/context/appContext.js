@@ -2,18 +2,18 @@ import React, { useReducer, useContext } from 'react'
 
 import reducer  from './reducer'
 import axios from 'axios'
+
 import { 
-  UPDATE_WATCHLIST, 
-  UPDATE_WATCHLIST_SUCCESS,
-  GET_WATCHLISTDATA_BEGIN,
-  GET_WATCHLISTDATA_SUCCESS,
-  GET_WATCHLISTDATA_ERROR,
+  GET_COINSDATA_BEGIN,
+  GET_COINSDATA_SUCCESS,
 } from './actions'
 
 const initialState = {
   isLoading: false,
-  watchlist: [],
-  watchListData: []
+  trendingData: [],
+  marketData: [],
+  // watchlist: [],
+  // watchListData: []
 }
 
 const AppContext = React.createContext()
@@ -21,68 +21,38 @@ const AppContext = React.createContext()
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const updateWatchlist = async (coinId) => {
+  const getCoinsData = async () => {
+    dispatch({ type: GET_COINSDATA_BEGIN })
+
     try {
-      dispatch({ 
-        type: UPDATE_WATCHLIST,
+      const [ trendingResponse, marketResponse ] = await Promise.all([
+        axios.get('https://api.coingecko.com/api/v3/search/trending'),
+        axios.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd')
+      ])
+      
+      dispatch({
+        type: GET_COINSDATA_SUCCESS,
         payload: {
-          coin: coinId
-          } 
-        })
-        
-      getWatchlistData()
-
-      
-
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const getWatchlistData = async (list) => {
-    dispatch({type: GET_WATCHLISTDATA_BEGIN})
-    try {
-
-      if(state.watchlist?.length > 0) {
-        let ids = ''
-
-        for(let i=0; i<= state.watchlist.length - 1; i++) {
-          if(i < state.watchlist.length - 1) {
-            ids += `${state.watchlist[i]}%2C`
-          } else {
-            ids += state.watchlist[i]
-          }
+          trendingData: trendingResponse.data.coins,
+          marketData: marketResponse.data
         }
+      })
 
-        const { data } = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
-        
-        // console.log(data)
-
-        dispatch({
-          type: GET_WATCHLISTDATA_SUCCESS,
-          payload: {
-            data
-          }
-        })
-
-      }
-      
-    
-    } catch (err) {
-      console.log(err)
+    } catch (error) {
+      throw new Error('API Limit for the minute exceeded')
+      return
     }
-    
-
-
-
   }
+
+  // watchlist
+  //  const { data } = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
+        
 
   return (
     <AppContext.Provider
       value={
         {...state,
-          updateWatchlist,
-          getWatchlistData
+          getCoinsData,
         }
       }
     >
