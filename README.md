@@ -9,9 +9,6 @@
 * CoinGecko API - https://www.coingecko.com/en/api/documentation
 * Reddit API
 
-## Deployment
--
-
 ## Contributions
 - If you'd like to collaborate or contribute to this app, please email - neemavelasco@gmail.com
 
