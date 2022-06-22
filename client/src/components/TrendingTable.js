@@ -20,10 +20,10 @@ const TrendingTable = () => {
   const { trendingData } = useAppContext()
 
   return (
-    <TableContainer minWidth={300}>
+    <TableContainer minW={{xs: '300', md: '400'}}>
       <Box display='flex'>
         <ImFire style={{color: 'orange'}}/>
-        <Heading as='h3'size={'sm'} mb={4} ml={2}> 
+        <Heading as='h3' size={{xs: 'xs', md: 'sm'}} mb={4} ml={2}> 
           Trending
         </Heading>
       </Box>

@@ -1,12 +1,13 @@
 import { useEffect } from 'react'
-import { MarketTable, NewsContainer, TrendingTable } from '../components'
+import { MarketTable, NewsContainer, NewsContainerRow, TrendingTable } from '../components'
 import { useAppContext } from '../context/appContext';
 
 import { 
   Container,
   Flex,
   Spinner,
-  Center
+  Center,
+  Divider,
 } from '@chakra-ui/react';
 
 const Home = () => {
@@ -26,19 +27,20 @@ const Home = () => {
       </Container>
     ) : (
       <>
-        <Container maxW='6xl'>
+        <Container maxW='6xl' mb='100px'>
           <Flex 
             direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row'}} 
             align={{sm: 'center', lg: 'flex-start'}} 
-            justify='center'
-            gap={{ xs: '10', sm: '10', md: '10', lg: '20'}}
-            mb={10}
+            justify='space-between'
+            gap={{ xs: '60px', md: '50px'}}
+            mb='75px'
           >
-              <TrendingTable/>
               <NewsContainer/>
+              <TrendingTable/>
           </Flex>
+          <NewsContainerRow/>
         </Container>
-        <Container maxW='7xl' pt={4}>
+        <Container maxW='7xl'>
           <MarketTable/>
         </Container>
       </>

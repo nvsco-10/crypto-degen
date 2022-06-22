@@ -21,7 +21,8 @@ const reducer = (state, action) => {
       isLoading: false,
       trendingData: action.payload.trendingData,
       marketData: action.payload.marketData,
-      newsData: action.payload.newsData
+      rCryptoData: action.payload.rCryptoData,
+      rSatoshiData: action.payload.rSatoshiData
     }
   }
 

@@ -2,6 +2,7 @@ import News from './News';
 import { useAppContext } from '../context/appContext';
 
 import { AiOutlineReddit } from 'react-icons/ai'
+import { FaBitcoin } from 'react-icons/fa'
 
 import { 
   VStack, 
@@ -12,23 +13,25 @@ import {
 } from '@chakra-ui/react';
 
 const NewsContainer = () => {
-  const { newsData } = useAppContext()
-  console.log(newsData)
+  const { rCryptoData } = useAppContext()
 
   return (
     <VStack
       divider={<StackDivider borderColor='gray.200' />}
       spacing={4}
       align='stretch'
+      maxWidth={{xs: '500', md: '450', lg: '600' }}
     >
       <Box display='flex'>
-        <Heading as='h3'size='sm'> 
+        <FaBitcoin style={{color: 'orange'}} />
+        <Heading as='h3' size={{xs: 'xs', md: 'sm'}} ml={2}>
+          <a href='https://www.reddit.com/r/CryptoCurrency/' rel='noreferrer' target='_blank'> 
           Hottest in r/CryptoCurrency
+          </a>
         </Heading>
       </Box>
-     { newsData?.length > 0 ? (
-      newsData?.map(post => {
-        console.log(post.created)
+     { rCryptoData?.length > 0 ? (
+      rCryptoData?.map(post => {
         return (
           <News
             key={post.data.id}

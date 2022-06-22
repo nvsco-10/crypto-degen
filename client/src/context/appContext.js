@@ -12,7 +12,8 @@ const initialState = {
   isLoading: false,
   trendingData: [],
   marketData: [],
-  newsData: [],
+  rCryptoData: [],
+  rSatoshiData: []
   // watchlist: [],
   // watchListData: []
 }
@@ -26,21 +27,23 @@ const AppProvider = ({ children }) => {
     dispatch({ type: GET_COINSDATA_BEGIN })
 
     try {
-      const [ trendingResponse, marketResponse, redditResponse ] = await Promise.all([
+      const [ trendingResponse, marketResponse, rCryptoResponse, rSatoshiResponse ] = await Promise.all([
         axios.get('https://api.coingecko.com/api/v3/search/trending'),
         axios.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd'),
-        axios.get('https://www.reddit.com/r/cryptocurrency/hot.json')
+        axios.get('https://www.reddit.com/r/cryptocurrency/hot.json'),
+        axios.get('https://www.reddit.com/r/SatoshiStreetBets/hot.json')
       ])
 
-      const redditPosts = (redditResponse.data.data.children).slice(0,5)
-      // console.log(redditPosts)
+      const rCryptoPosts = (rCryptoResponse.data.data.children).slice(0,4)
+      const rSatoshiPosts = (rSatoshiResponse.data.data.children).slice(0,6)
       
       dispatch({
         type: GET_COINSDATA_SUCCESS,
         payload: {
           trendingData: trendingResponse.data.coins,
           marketData: marketResponse.data,
-          newsData: redditPosts
+          rCryptoData: rCryptoPosts,
+          rSatoshiData: rSatoshiPosts
         }
       })
 
