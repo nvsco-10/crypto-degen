@@ -49,7 +49,6 @@ const AppProvider = ({ children }) => {
 
     } catch (error) {
       throw new Error('API Limit for the minute exceeded')
-      return
     }
   }
 

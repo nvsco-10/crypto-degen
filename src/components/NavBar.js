@@ -63,14 +63,17 @@ const NavBar = () => {
           display={{ base: 'flex', md: 'none' }}>
           <IconButton
             onClick={onToggle}
-            icon={
-              isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />
+            icon={ isOpen 
+              ? <CloseIcon w={3} h={3} /> 
+              : <HamburgerIcon w={5} h={5} />
             }
             variant={'ghost'}
             aria-label={'Toggle Navigation'}
           />
         </Flex>
-        <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
+        <Flex 
+          flex={{ base: 1 }} 
+          justify={{ base: 'center', md: 'start' }}>
         {/* logo  */}
           <Box w='80px'>
             <Link href='/'>

@@ -7,7 +7,6 @@ import {
   Flex,
   Spinner,
   Center,
-  Divider,
 } from '@chakra-ui/react';
 
 const Home = () => {
@@ -29,7 +28,7 @@ const Home = () => {
       <>
         <Container maxW='6xl' mb='100px'>
           <Flex 
-            direction={{ xs: 'column', sm: 'column', md: 'column', lg: 'row'}} 
+            direction={{ xs: 'column', lg: 'row' }} 
             align={{sm: 'center', lg: 'flex-start'}} 
             justify='space-between'
             gap={{ xs: '60px', md: '50px'}}

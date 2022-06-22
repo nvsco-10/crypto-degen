@@ -38,7 +38,11 @@ const MarketTable = () => {
   return (
     <>
       <Container>
-        <Heading as='h2' size={{xs: 'sm', md: 'md'}} textAlign='center'> 
+        <Heading 
+          as='h2' 
+          size={{xs: 'sm', md: 'md'}} 
+          textAlign='center'
+          > 
           Top 100 Cryptocurrencies
         </Heading>
         <Center>
