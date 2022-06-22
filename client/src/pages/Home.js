@@ -1,12 +1,8 @@
 import React from 'react'
-import { MarketTable, TrendingTable } from '../components'
+import { MarketTable, NewsContainer, TrendingTable, WatchlistTable } from '../components'
 import { 
   Container,
-  SimpleGrid,
-  Text,
   Flex,
-  Box,
-  HStack
 } from '@chakra-ui/react';
 
 const Home = () => {
@@ -15,12 +11,13 @@ const Home = () => {
       <Container maxW='6xl'>
         <Flex 
           direction={{ sm: 'column', md: 'column', lg: 'row'}} 
-          align='center' justify='center'
+          align='flex-start' justify='center'
           gap={{ sm: '10', md: '10', lg: '20'}}
           mb={10}
         >
             <TrendingTable/>
-            <TrendingTable/>
+            {/* <WatchlistTable/> */}
+            <NewsContainer/>
         </Flex>
       </Container>
       <Container maxW='7xl' pt={4}>

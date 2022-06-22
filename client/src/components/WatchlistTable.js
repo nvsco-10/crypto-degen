@@ -1,38 +1,22 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useAppContext } from '../context/appContext';
 
 import { Heading, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Tfoot, HStack, Box, Text, Image } from '@chakra-ui/react';
 
-import { ImFire } from 'react-icons/im'
-
-const TrendingTable = () => {
-  const [ marketData, setMarketData ] = useState([])
+const WatchlistTable = () => {
+  const { watchlist, getWatchlistData, watchlistData } = useAppContext()
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await axios.get('https://api.coingecko.com/api/v3/search/trending')
-
-      setMarketData(data.coins)
-      // console.log(data.coins)
-    }
-
-    fetchData()
-
-    // const interval = setInterval(() => {
-    //   fetchData()
-    // }, 30000)
-
-    // return () => clearInterval()
+    getWatchlistData()
     
   }, [])
-
-
+  
   return (
     <TableContainer minW='400'>
       <Box display='flex'>
-        <ImFire style={{color: 'orange'}}/>
+        {/* <ImFire style={{color: 'orange'}}/> */}
         <Heading as='h3'size='sm' mb={4} ml={2}> 
-          Trending
+          Watchlist
         </Heading>
       </Box>
       <Table size='sm'>
@@ -40,13 +24,13 @@ const TrendingTable = () => {
           <Tr>
             <Th>Name</Th>
             <Th>Symbol</Th>
-            <Th>Rank</Th>
+            <Th isNumeric>Price</Th>
+            <Th isNumeric>24h %</Th>
           </Tr>
         </Thead>
         <Tbody>
-          { marketData.length > 0 ? (
-            marketData.map(data => {
-              const { item } = data
+          { watchlistData?.length > 0 ? (
+            watchlistData?.map(item => {
               return (
               <Tr key={item.id}>
                 <Td>
@@ -54,7 +38,7 @@ const TrendingTable = () => {
                     <Image
                       borderRadius='full'
                       boxSize='30px'
-                      src={item.thumb}
+                      src={item.image}
                       alt={item.name}
                     />
                     <Box>
@@ -63,7 +47,14 @@ const TrendingTable = () => {
                   </HStack>
                 </Td>
                 <Td>{item.symbol}</Td>
-                <Td isNumeric>{item.market_cap_rank}</Td>
+                <Td isNumeric fontWeight={600}>
+                  {
+                    item.current_price < 1 ?
+                    `$ ${item.current_price?.toFixed(8).toLocaleString('en-US')}` 
+                    : `$ ${item.current_price?.toLocaleString('en-US')}`
+                  }
+                </Td>
+                <Td isNumeric fontWeight={600} color={Math.sign(item. price_change_percentage_24h) === 1 ? 'limegreen' : 'tomato'}>{`${item.price_change_percentage_24h}%`}</Td>
               </Tr>
               )
             })
@@ -73,16 +64,9 @@ const TrendingTable = () => {
             </Tr>
           )}
         </Tbody>
-        {/* <Tfoot>
-          <Tr>
-            <Th>To convert</Th>
-            <Th>into</Th>
-            <Th isNumeric>multiply by</Th>
-          </Tr>
-        </Tfoot> */}
       </Table>
     </TableContainer>
   )
 }
 
-export default TrendingTable
+export default WatchlistTable

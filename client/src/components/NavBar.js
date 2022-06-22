@@ -66,7 +66,7 @@ const NavBar = () => {
         {/* logo  */}
         <Box w='100px'>
           {/* <Image src={logo} alt='asian grub dfw' /> */}
-          CryptoTrades
+          CryptoDegen
         </Box>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>

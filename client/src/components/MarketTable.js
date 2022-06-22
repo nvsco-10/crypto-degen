@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useAppContext } from '../context/appContext';
 
-import { Heading, Center, Input, Container, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Tfoot, HStack, Box, Text, Image } from '@chakra-ui/react';
+import { Heading, Center, Input, Container, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Tfoot, HStack, Box, Text, Image, IconButton } from '@chakra-ui/react';
+
+import { AiOutlineStar } from 'react-icons/ai'
 
 const MarketTable = () => {
-  const [ marketData, setMarketData ] = useState([])
-  const [ search, setSearch ] = useState('')
+  const [ marketData, setMarketData ] = useState([]);
+  const [ search, setSearch ] = useState('');
+  const { updateWatchlist } = useAppContext();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,6 +61,7 @@ const MarketTable = () => {
       <Table size='sm'>
         <Thead>
           <Tr>
+            <Th></Th>
             <Th isNumeric>#</Th>
             <Th>Name</Th>
             <Th isNumeric>Price</Th>
@@ -69,10 +74,18 @@ const MarketTable = () => {
           </Tr>
         </Thead>
         <Tbody>
-          { filteredData.length > 0 ? (
-            filteredData.map(item => {
+          { filteredData?.length > 0 ? (
+            filteredData?.map(item => {
               return (
               <Tr key={item.id}>
+                <Td m='0'>
+                  <IconButton
+                    variant='transparent'
+                    // color='green'
+                    icon={<AiOutlineStar/>}
+                    onClick={() => updateWatchlist(item.id)}
+                  />
+                </Td>
                 <Td isNumeric>{item.market_cap_rank}</Td>
                 <Td>
                   <HStack spacing='24px'>
@@ -104,7 +117,9 @@ const MarketTable = () => {
               )
             })
           ) : (
-            <Text>Loading...</Text>
+            <Tr>
+              <Td>Loading...</Td>
+            </Tr>
           )}
         </Tbody>
         {/* <Tfoot>
