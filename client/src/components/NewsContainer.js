@@ -24,13 +24,20 @@ const NewsContainer = () => {
     >
       <Box display='flex'>
         <FaBitcoin style={{color: 'orange'}} />
-        <Heading as='h3' size={{xs: 'xs', md: 'sm'}} ml={2}>
-          <a href='https://www.reddit.com/r/CryptoCurrency/' rel='noreferrer' target='_blank'> 
-          Hottest in r/CryptoCurrency
+        <Heading 
+          as='h3' 
+          size={{xs: 'xs', md: 'sm'}} 
+          ml={2}>
+          <a 
+            href='https://www.reddit.com/r/CryptoCurrency/' 
+            rel='noreferrer' 
+            target='_blank'
+          > 
+            Hottest in r/CryptoCurrency
           </a>
         </Heading>
       </Box>
-     { rCryptoData?.length > 0 ? (
+     {rCryptoData?.length > 0 ? (
       rCryptoData?.map(post => {
         return (
           <News

@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom'
-import { NavBar } from '../components'
+import { NavBar, Footer } from '../components'
 
 const SharedLayout = () => {
   return (
@@ -8,6 +8,7 @@ const SharedLayout = () => {
       <main>
         <Outlet/>
       </main>
+      <Footer />
     </>
   )
 }

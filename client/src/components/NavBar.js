@@ -4,6 +4,7 @@ import logolight from '../assets/images/logo-light.png'
 
 // Chakra imports
 import {
+  Container,
   Box,
   Flex,
   Text,
@@ -45,13 +46,13 @@ const NavBar = () => {
   const { colorMode, toggleColorMode } = useColorMode()
 
   return (
-    <Box>
+    <Container maxW='1700'>
       <Flex
         bg={useColorModeValue('white', 'gray.800')}
         color={useColorModeValue('gray.600', 'white')}
         minH={'4rem'}
         py={{ base: 2 }}
-        px={{ base: 6 }}
+        px={{ base: 2 }}
         borderBottom={1}
         borderStyle={'solid'}
         borderColor={useColorModeValue('gray.200', 'gray.900')}
@@ -72,9 +73,16 @@ const NavBar = () => {
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
         {/* logo  */}
           <Box w='80px'>
-            <Image src={ colorMode === 'light' ? logo : logolight } alt='crypto degen' />
+            <Link href='/'>
+              <Image 
+                src={ colorMode === 'light' ? logo : logolight } 
+                alt='crypto degen' />
+            </Link>
           </Box>
-          <Flex display={{ base: 'none', md: 'flex' }} alignItems='center' ml={10}>
+          <Flex 
+            display={{ base: 'none', md: 'flex' }} 
+            alignItems='center' 
+            ml={10}>
             <DesktopNav />
           </Flex>
         </Flex>
@@ -134,7 +142,7 @@ const NavBar = () => {
       <Collapse in={isOpen} animateOpacity>
         <MobileNav />
       </Collapse>
-    </Box>
+    </Container>
   );
 }
 
@@ -162,8 +170,8 @@ const DesktopNav = () => {
           </Link>
           { navItem.span && (
             <Text as='i' fontSize={10} textColor='center'>
-            *{navItem.span}
-          </Text>
+              *{navItem.span}
+            </Text>
           )}
         </Box>
       ))}
@@ -178,13 +186,16 @@ const MobileNav = () => {
       p={6}
       display={{ md: 'none' }}>
       {navItems.map((navItem) => (
-        <MobileNavItem key={navItem.label} {...navItem} />
+        <MobileNavItem 
+          key={navItem.label} 
+          {...navItem} 
+        />
       ))}
     </Stack>
   );
 };
 
-const MobileNavItem = ({ label, href }) => {
+const MobileNavItem = ({ label, href, span }) => {
 
   return (
     <Stack spacing={4}>
@@ -202,6 +213,11 @@ const MobileNavItem = ({ label, href }) => {
           color={useColorModeValue('gray.600', 'gray.200')}>
           {label}
         </Text>
+        { span && (
+          <Text as='i' fontSize={10} textColor='center'>
+            *{span}
+          </Text>
+        )}
       </Flex>
 
     </Stack>
