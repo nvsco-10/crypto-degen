@@ -20,7 +20,8 @@ const reducer = (state, action) => {
       ...state,
       isLoading: false,
       trendingData: action.payload.trendingData,
-      marketData: action.payload.marketData
+      marketData: action.payload.marketData,
+      newsData: action.payload.newsData
     }
   }
 

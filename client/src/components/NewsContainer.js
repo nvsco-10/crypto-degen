@@ -1,4 +1,7 @@
 import News from './News';
+import { useAppContext } from '../context/appContext';
+
+import { AiOutlineReddit } from 'react-icons/ai'
 
 import { 
   VStack, 
@@ -8,9 +11,9 @@ import {
   Text 
 } from '@chakra-ui/react';
 
-import mockData from '../utils/mockData'
-
 const NewsContainer = () => {
+  const { newsData } = useAppContext()
+  console.log(newsData)
 
   return (
     <VStack
@@ -18,24 +21,22 @@ const NewsContainer = () => {
       spacing={4}
       align='stretch'
     >
-      <Box display='flex' flexDirection='column'>
-        {/* <ImFire style={{color: 'orange'}}/> */}
+      <Box display='flex'>
         <Heading as='h3'size='sm'> 
-          Latest News
+          Hottest in r/CryptoCurrency
         </Heading>
-        <Text as='i' fontSize='xs'>
-          *mock news data
-        </Text>
       </Box>
-     { mockData ? (
-      mockData?.data.map(article => {
+     { newsData?.length > 0 ? (
+      newsData?.map(post => {
+        console.log(post.created)
         return (
           <News
-            key={article.uuid}
-            title={article.title}
-            snippet={article.snippet}
-            image={article.image_url}
-            url={article.url} 
+            key={post.data.id}
+            title={post.data.title}
+            snippet={post.data.selftext}
+            comments={post.data.num_comments}
+            upvotes={post.data.ups}
+            url={post.data.url}
           />
         )
       })
