@@ -7,6 +7,7 @@ import {
   Flex,
   Spinner,
   Center,
+  Box,
 } from '@chakra-ui/react';
 
 const Home = () => {
@@ -25,7 +26,7 @@ const Home = () => {
         </Center>
       </Container>
     ) : (
-      <>
+      <Box py={6} px={1}>
         <Container maxW='6xl' mb='100px'>
           <Flex 
             direction={{ xs: 'column', lg: 'row' }} 
@@ -42,7 +43,7 @@ const Home = () => {
         <Container maxW='7xl'>
           <MarketTable/>
         </Container>
-      </>
+      </Box>
     )}
     </>
   )
