@@ -14,8 +14,8 @@ import IconBtn from "./IconBtn";
 import PortfolioMain from "./PortfolioMain";
 import PortfolioRow from "./PortfolioRow";
 import Portfolio from "./Portfolio"
-import Coins from "./Coins";
 import CoinsRow from "./CoinsRow";
+import CoinsSearch from "./CoinsSearch";
 
 
 
@@ -32,6 +32,6 @@ export {
   PortfolioMain,
   PortfolioRow,
   Portfolio,
-  Coins,
-  CoinsRow 
+  CoinsRow,
+  CoinsSearch 
 }

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useAppContext } from '../context/appContext'
-import { Coins } from '../components'
+import { Coins, Portfolio } from './'
 
 import {
   Container,
@@ -16,7 +16,8 @@ const Simulator = () => {
   // },[])
 
   return (
-    <Coins />
+    <Portfolio />
+    // <Coins />
   )
 }
 

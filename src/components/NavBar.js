@@ -46,10 +46,15 @@ const NavBar = () => {
   const { colorMode, toggleColorMode } = useColorMode()
 
   return (
-    <Container maxW='1600' as="header" position="sticky" top='0' zIndex={1}>
+    <Container 
+      bg={useColorModeValue('white', 'gray.800')}
+      color={useColorModeValue('gray.600', 'white')}
+      maxW='1600' 
+      as="header" 
+      position="sticky" 
+      top='0' 
+      zIndex={1} >
       <Flex
-        bg={useColorModeValue('white', 'gray.800')}
-        color={useColorModeValue('gray.600', 'white')}
         minH={'4rem'}
         py={{ base: 2 }}
         px={{ base: 2 }}

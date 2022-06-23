@@ -1,14 +1,30 @@
-import React from 'react'
-import { HStack, Image, Text, Flex, StackDivider, Box, Switch } from '@chakra-ui/react'
+import { useState } from 'react'
+import { useAppContext } from '../context/appContext'
 
-const CoinsRow = ({ id, name, symbol, image}) => {
+import { HStack, Image, Text, Flex, StackDivider, Box, Switch, Button, useColorModeValue, } from '@chakra-ui/react'
+
+import { StarIcon } from '@chakra-ui/icons'
+
+const CoinsRow = ({ id, name, symbol, image }) => {
+  const { addToWatchlist } = useAppContext()
+
+  const [ isSaved, setSaved ] = useState(false)
+  const handleClick = (e) => {
+    setSaved(!isSaved)
+    if(isSaved === false) {
+      addToWatchlist(id)
+    }
+    
+  }
+
   return (
     <HStack 
       px={2} 
       py={8}  
       justifyContent='space-between' 
       height='50px' 
-      borderBottom={'solid rgba(243, 235, 239, 0.11) 1px'}
+      
+      borderBottom={useColorModeValue('solid 1px lightgray', 'solid 1px rgba(243, 235, 239, 0.11)')}
     >
         <HStack>
           <Image
@@ -25,9 +41,9 @@ const CoinsRow = ({ id, name, symbol, image}) => {
             </Text>
           </Flex>
         </HStack>
-        <Box px={2}  >
-          <Switch size='md' />
-        </Box>
+        <Button px={2} onClick={handleClick} background='transparent' >
+          <StarIcon color={ isSaved === true ? 'yellow' : 'white'}  />
+        </Button>
       </HStack>
   )
 }

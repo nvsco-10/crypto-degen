@@ -1,7 +1,7 @@
 import React from 'react'
 import { HStack, Image, Text, Flex, StackDivider } from '@chakra-ui/react'
 
-const PortfolioRow = () => {
+const PortfolioRow = ({id, name, image, symbol, price, change, owned }) => {
   return (
     <HStack 
       px={2} 
@@ -13,29 +13,33 @@ const PortfolioRow = () => {
         <HStack>
           <Image
             boxSize='25px'
-            src='https://bitcoin.org/img/icons/opengraph.png?1652976465'
-            alt='bitcoin'
+            src={image}
+            alt={name}
           />
           <Flex flexDir='column' px={2} >
             <Text fontSize={{xs: 'sm'}}>
-              Bitcoin
+              {name}
             </Text>
             <HStack>
               <Text as='span' fontSize={{xs: 'xs'}}>
-                $23,809.00
+                { price < 1 
+                    ? `$ ${price?.toFixed(8).toLocaleString('en-US')}` 
+                    : `$ ${price?.toLocaleString('en-US')}` }
               </Text>
-              <Text as='span' fontSize={{xs: 'xs'}} color={Math.sign(21) === 1 ? 'limegreen' : 'tomato'}>
-                2.45%
+              <Text as='span' fontSize={{xs: 'xs'}} color={Math.sign(change) === 1 ? 'limegreen' : 'tomato'}>
+                {`${change}%`}
               </Text>
             </HStack>
           </Flex>
         </HStack>
         <Flex flexDir='column' px={2} alignItems='flex-end' >
           <Text fontSize={{xs: 'sm'}}>
-            1203 BTC
+            {owned} {symbol?.toUpperCase()}
           </Text>
           <Text as='span' fontSize={{xs: 'xs'}}>
-            $1,809.00
+          { owned*price < 1 
+                    ? `$ ${(owned*price).toFixed(4).toLocaleString('en-US')}` 
+                    : `$ ${(owned*price).toLocaleString('en-US')}` }
           </Text>
         </Flex>
       </HStack>
