@@ -2,11 +2,15 @@ import NavBar from "./NavBar";
 import Footer from "./Footer";
 
 // home
+import HeadingWIcon from "./HeadingWIcon";
+import CoinNameWIcon from "./CoinNameWIcon";
+import CoinValue from "./CoinValue";
 import MarketTable from "./MarketTable";
 import TrendingTable from "./TrendingTable";
-import WatchlistTable from "./WatchlistTable";
+import TrendingRow from "./TrendingRow";
 import NewsContainer from "./NewsContainer";
 import NewsContainerRow from "./NewsContainerRow";
+import News from "./News";
 
 // trade
 import PortfolioOverview from "./PortfolioOverview";
@@ -17,15 +21,18 @@ import CoinsRow from "./CoinsRow";
 import CoinsSearch from "./CoinsSearch";
 
 
-
 export { 
   NavBar, 
-  Footer, 
+  Footer,
+  HeadingWIcon, 
+  CoinNameWIcon,
+  CoinValue,
   MarketTable, 
   TrendingTable, 
-  WatchlistTable, 
+  TrendingRow, 
   NewsContainer, 
   NewsContainerRow, 
+  News,
   PortfolioOverview,
   IconBtn,
   PortfolioMain,

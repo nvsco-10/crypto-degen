@@ -1,14 +1,11 @@
-import News from './News';
+import { HeadingWIcon, News } from '.'
 import { useAppContext } from '../context/appContext';
 
-import { AiOutlineReddit } from 'react-icons/ai'
 import { FaBitcoin } from 'react-icons/fa'
 
 import { 
   VStack, 
-  Box, 
   StackDivider, 
-  Heading, 
   Text 
 } from '@chakra-ui/react';
 
@@ -22,21 +19,11 @@ const NewsContainer = () => {
       align='stretch'
       maxWidth={{xs: '500', md: '450', lg: '600' }}
     >
-      <Box display='flex'>
-        <FaBitcoin style={{color: 'orange'}} />
-        <Heading 
-          as='h3' 
-          size={{xs: 'xs', md: 'sm'}} 
-          ml={2}>
-          <a 
-            href='https://www.reddit.com/r/CryptoCurrency/' 
-            rel='noreferrer' 
-            target='_blank'
-          > 
-            Hottest in r/CryptoCurrency
-          </a>
-        </Heading>
-      </Box>
+      <HeadingWIcon
+        text='Hottest in r/CryptoCurrency'
+        icon={<FaBitcoin style={{color: 'orange'}} />}
+        url='https://www.reddit.com/r/CryptoCurrency/'
+      />
      {rCryptoData?.length > 0 ? (
       rCryptoData?.map(post => {
         return (

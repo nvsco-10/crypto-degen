@@ -104,7 +104,6 @@ const AppProvider = ({ children }) => {
 
     try {
       // const { portfolio } = state
-      // const portfolio = ['bitcoin', 'ethereum', 'solana', 'monero', 'dogecoin'];
       
       let ids = '';
 
@@ -118,8 +117,6 @@ const AppProvider = ({ children }) => {
       }
 
       const { data } = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
-
-      // console.log(data)
 
       let mergedData = [];
       let totalBal = 0;
@@ -138,7 +135,7 @@ const AppProvider = ({ children }) => {
         totalBal += (portfolioMockData[i].qty * data[i].current_price)
       }
 
-      console.log(mergedData)
+      // console.log(mergedData)
 
       dispatch({
         type: GET_PORTFOLIO_SUCCESS,

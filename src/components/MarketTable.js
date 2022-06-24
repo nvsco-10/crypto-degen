@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useAppContext } from '../context/appContext';
 
+import { CoinNameWIcon, CoinValue } from '.'
+
 import { 
   Heading, 
   Center, 
@@ -13,15 +15,8 @@ import {
   Th, 
   Tbody, 
   Td, 
-  Tfoot, 
-  HStack, 
-  Box, 
   Text, 
-  Image, 
-  IconButton, 
 } from '@chakra-ui/react';
-
-import { AiOutlineStar } from 'react-icons/ai'
 
 const MarketTable = () => {
   const { marketData } = useAppContext();
@@ -62,7 +57,6 @@ const MarketTable = () => {
         <Table size='sm'>
           <Thead>
             <Tr>
-              <Th></Th>
               <Th pl={0} isNumeric>#</Th>
               <Th>Name</Th>
               <Th isNumeric>Price</Th>
@@ -79,18 +73,7 @@ const MarketTable = () => {
               filteredData?.map(item => {
                 return (
                 <Tr key={item.id}>
-
-                  {/* watchlist icon button */}
-                  <Td padding={0}>
-                    <IconButton
-                      variant='transparent'
-                      // color='green'
-                      icon={<AiOutlineStar/>}
-                      boxSize='10px'
-                      // onClick={() => updateWatchlist(item.id)}
-                    />
-                  </Td>
-
+            
                   {/* market cap rank */}
                   <Td 
                     pl={0} 
@@ -100,30 +83,18 @@ const MarketTable = () => {
                   </Td>
 
                   {/* name and icon */}
-                  <Td>
-                    <HStack spacing='24px'>
-                      <Image
-                        borderRadius='full'
-                        boxSize={{xs: '20px', lg: '30px'}}
-                        src={item.image}
-                        alt={item.name}
-                      />
-                      <Box>
-                        {item.name}
-                      </Box>
-                    </HStack>
-                  </Td>
+                  <CoinNameWIcon
+                    image={item.image}
+                    name={item.name}
+                  />
 
                   {/* current price */}
-                  <Td 
-                    isNumeric 
+                  <CoinValue 
                     fontWeight={600}
-                  >
-                    { item.current_price < 1 
-                      ? `$ ${item.current_price?.toFixed(8).toLocaleString('en-US')}` 
-                      : `$ ${item.current_price?.toLocaleString('en-US')}` }
-                  </Td>
-
+                    amount={item.current_price}
+                    type='dollar'
+                  />
+    
                   {/* 24h % change */}
                   <Td 
                     isNumeric 
@@ -134,55 +105,43 @@ const MarketTable = () => {
                   </Td>
 
                   {/* market cap */}
-                  <Td 
-                    isNumeric 
+                  <CoinValue 
                     fontWeight={600}
-                  >
-                    {`$ ${item.market_cap?.toLocaleString('en-US')}`}
-                  </Td>
+                    amount={item.market_cap}
+                    type='dollar'
+                  />
 
                   {/* 24h high */}      
-                  <Td 
-                    isNumeric
-                  >
-                    {`$ ${item.high_24h?.toLocaleString('en-US')}`}
-                  </Td>
+                  <CoinValue 
+                    fontWeight={400}
+                    amount={item.high_24h}
+                    type='dollar'
+                  />
 
                   {/* 24h low */} 
-                  <Td 
-                    isNumeric
-                  >
-                    {`$ ${item.low_24h?.toLocaleString('en-US')}`}
-                  </Td>
+                  <CoinValue 
+                    fontWeight={400}
+                    amount={item.low_24h}
+                    type='dollar'
+                  />
 
                   {/* circulating supply */} 
-                  <Td 
-                    isNumeric 
+                  <CoinValue 
                     fontWeight={600}
-                  >
-                    { `${item.circulating_supply?.toLocaleString('en-US')}`}
-                  </Td>
+                    amount={item.circulating_supply}
+                  />
 
                   {/* total supply */} 
-                  <Td 
-                    isNumeric
-                  >
-                    { item.total_supply ? `${item.total_supply?.toLocaleString('en-US')}` : '-'}
-                  </Td>
+                  <CoinValue 
+                    fontWeight={400}
+                    amount={item.total_supply || '-'}
+                  />
 
                 </Tr>
                 )
               })
             )}
           </Tbody>
-
-          {/* <Tfoot>
-            <Tr>
-              <Th>To convert</Th>
-              <Th>into</Th>
-              <Th isNumeric>multiply by</Th>
-            </Tr>
-          </Tfoot> */}
 
         </Table>
       </TableContainer>

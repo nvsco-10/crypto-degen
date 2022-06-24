@@ -1,17 +1,14 @@
 import { useAppContext } from '../context/appContext';
 
+import { HeadingWIcon, TrendingRow } from '.'
+
 import { 
-  Heading, 
   TableContainer, 
   Table, 
   Thead, 
   Tr, 
   Th, 
   Tbody, 
-  Td, 
-  HStack, 
-  Box, 
-  Image, 
 } from '@chakra-ui/react';
 
 import { ImFire } from 'react-icons/im'
@@ -21,13 +18,12 @@ const TrendingTable = () => {
 
   return (
     <TableContainer minW={{xs: '300', md: '400'}}>
-      <Box display='flex'>
-        <ImFire style={{color: 'orange'}}/>
-        <Heading as='h3' size={{xs: 'xs', md: 'sm'}} mb={4} ml={2}> 
-          Trending
-        </Heading>
-      </Box>
-      <Table size='sm'>
+       <HeadingWIcon
+        text='Trending'
+        icon={<ImFire style={{color: 'orange'}}/>}
+        url='https://www.coingecko.com/en/watchlists/trending-crypto/united-states'
+      />
+      <Table size='sm' mt={4}>
         <Thead>
           <Tr>
             <Th>Name</Th>
@@ -40,34 +36,18 @@ const TrendingTable = () => {
             trendingData.map(data => {
               const { item } = data
               return (
-              <Tr key={item.id}>
-                <Td>
-                  <HStack spacing='24px'>
-                    <Image
-                      borderRadius='full'
-                      boxSize={{xs: '20px', lg: '30px'}}
-                      src={item.thumb}
-                      alt={item.name}
-                    />
-                    <Box>
-                      {item.name}
-                    </Box>
-                  </HStack>
-                </Td>
-                <Td fontWeight={600} fontSize='xs'>{item.symbol}</Td>
-                <Td isNumeric>{item.market_cap_rank}</Td>
-              </Tr>
+                <TrendingRow
+                  key={item.id}
+                  id={item.id}
+                  name={item.name}
+                  symbol={item.symbol}
+                  thumb={item.thumb}
+                  rank={item.market_cap_rank}
+                />
               )
             })
           )}
         </Tbody>
-        {/* <Tfoot>
-          <Tr>
-            <Th>To convert</Th>
-            <Th>into</Th>
-            <Th isNumeric>multiply by</Th>
-          </Tr>
-        </Tfoot> */}
       </Table>
     </TableContainer>
   )
