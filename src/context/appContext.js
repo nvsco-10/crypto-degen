@@ -6,6 +6,9 @@ import axios from 'axios'
 import portfolioMockData from '../utils/portfolioMockData.js'
 
 import { 
+  HANDLE_CHANGE,
+  GET_COINDATA_SUCCESS,
+  GET_COINDATA_ERROR,
   GET_COINSDATA_BEGIN,
   GET_COINSDATA_SUCCESS,
   GET_COINSDATA_ERROR,
@@ -26,12 +29,20 @@ const initialState = {
   portfolio: [],
   portfolioMarketData: [],
   portfolioBalance: 0,
+  tetherBalance: 0,
+  coinId: '',
+  coinData: {},
+  qty: 0,
 }
 
 const AppContext = React.createContext()
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  const handleChange = ({ name, value }) => {
+    dispatch({ type: HANDLE_CHANGE, payload: { name, value } })
+  }
 
   const getCoinsData = async () => {
     dispatch({ type: GET_COINSDATA_BEGIN })
@@ -59,6 +70,22 @@ const AppProvider = ({ children }) => {
 
     } catch (error) {
       throw new Error('API Limit for the minute exceeded')
+    }
+  }
+
+  const getCoinData = async (coinId) => {
+    try {
+      const { data } = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coinId}&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
+
+      // console.log(data)
+      dispatch({
+        type: GET_COINDATA_SUCCESS,
+        payload: {
+          coinData: data[0]
+        }
+      })
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -120,28 +147,35 @@ const AppProvider = ({ children }) => {
 
       let mergedData = [];
       let totalBal = 0;
+      let tetherBal = 0;
 
       for (let i=0; i<portfolioMockData.length; i++) {
+        const coinData = data.find(coin => coin.id === portfolioMockData[i].coinId)
+
         let obj = {
           ...portfolioMockData[i],
-          "symbol": data[i].symbol,
-          "name": data[i].name,
-          "current_price": data[i].current_price,
-          "price_change_percentage_24h": data[i].price_change_percentage_24h,
-          "image": data[i].image
+          "current_balance": portfolioMockData[i].qty * coinData.current_price,
+          "symbol": coinData.symbol,
+          "name": coinData.name,
+          "current_price": coinData.current_price,
+          "price_change_percentage_24h": coinData.price_change_percentage_24h,
+          "image": coinData.image
         }
         mergedData.push(obj)
 
-        totalBal += (portfolioMockData[i].qty * data[i].current_price)
+        totalBal += (portfolioMockData[i].qty * coinData.current_price)
+        
+        if(portfolioMockData[i].coinId === 'tether') {
+          tetherBal = obj.current_balance
+        }
       }
-
-      // console.log(mergedData)
 
       dispatch({
         type: GET_PORTFOLIO_SUCCESS,
         payload: {
           portfolioMarketData: mergedData,
-          portfolioBalance: totalBal
+          portfolioBalance: totalBal,
+          tetherBalance: tetherBal
         }
       })
 
@@ -158,7 +192,9 @@ const AppProvider = ({ children }) => {
     <AppContext.Provider
       value={
         {...state,
+          handleChange,
           getCoinsData,
+          getCoinData,
           addToPortfolio,
           getPortfolio
         }

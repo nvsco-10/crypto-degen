@@ -1,13 +1,14 @@
 import React from 'react'
 import { useAppContext } from '../context/appContext'
-import IconBtn from './IconBtn'
+import { IconBtn, TransactionModal } from '.'
 
 import {
   Container,
   Box,
   Heading,
   Text,
-  Button
+  Button,
+  useDisclosure
 } from '@chakra-ui/react'
 
 import { BiTransfer, BiPlus, BiMinus } from 'react-icons/bi'
@@ -16,6 +17,7 @@ import { GoSettings } from 'react-icons/go'
 
 const PortfolioOverview = () => {
   const { portfolioBalance } = useAppContext()
+
 
   return (
     <Box display='flex' flexDirection='column' py={6} px={4}>
@@ -29,7 +31,7 @@ const PortfolioOverview = () => {
           Crypto Wallet
         </Heading>
         <Box w='25px'>
-          <GoSettings className='btn-icon' />
+          {/* <GoSettings className='btn-icon' /> */}
         </Box>
       </Box>
       <Box display='flex' flexDirection='column' alignItems='center' mb={6}>
@@ -49,7 +51,7 @@ const PortfolioOverview = () => {
         </Box>
       </Box>
       <Box display='flex' justifyContent='space-evenly'>
-        <IconBtn icon={<BiPlus className='btn-icon'/>} label='Buy'/>
+        <IconBtn icon={<BiPlus className='btn-icon' />} label='Buy'/>
         <IconBtn icon={<BiMinus className='btn-icon'/>} label='Sell'/>
         <IconBtn icon={<BiTransfer className='btn-icon'/>} label='Transfer'/>
       </Box>

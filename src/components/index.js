@@ -17,8 +17,11 @@ import PortfolioOverview from "./PortfolioOverview";
 import IconBtn from "./IconBtn";
 import PortfolioMain from "./PortfolioMain";
 import PortfolioRow from "./PortfolioRow";
+import TransactionModal from "./TransactionModal";
+import TransactionModalBalance from "./TransactionModalBalance";
 import CoinsRow from "./CoinsRow";
 import CoinsSearch from "./CoinsSearch";
+
 
 
 export { 
@@ -37,6 +40,8 @@ export {
   IconBtn,
   PortfolioMain,
   PortfolioRow,
+  TransactionModal,
+  TransactionModalBalance,
   CoinsRow,
   CoinsSearch 
 }

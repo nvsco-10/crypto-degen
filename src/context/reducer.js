@@ -1,4 +1,7 @@
 import {
+  HANDLE_CHANGE,
+  GET_COINDATA_SUCCESS,
+  GET_COINDATA_ERROR,
   GET_COINSDATA_BEGIN,
   GET_COINSDATA_SUCCESS,
   GET_COINSDATA_ERROR,
@@ -14,6 +17,27 @@ import {
 import { initialState } from './appContext'
 
 const reducer = (state, action) => {
+
+  if (action.type === HANDLE_CHANGE) {
+    return {
+      ...state,
+      [action.payload.name]: action.payload.value,
+    }
+  }
+
+  if (action.type === GET_COINDATA_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      coinData: action.payload.coinData,
+    }
+  }
+
+  if(action.type === GET_COINDATA_ERROR) {
+    return {
+      ...state
+    }
+  }
   
   if (action.type === GET_COINSDATA_BEGIN) {
     return {
@@ -72,7 +96,8 @@ const reducer = (state, action) => {
       ...state,
       isLoading: false,
       portfolioMarketData: action.payload.portfolioMarketData,
-      portfolioBalance: action.payload.portfolioBalance
+      portfolioBalance: action.payload.portfolioBalance,
+      tetherBalance: action.payload.tetherBalance
     }
   }
 

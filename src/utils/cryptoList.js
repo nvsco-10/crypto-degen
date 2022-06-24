@@ -1498,6 +1498,12 @@ const cryptoList = [
       "id": "coti",
       "symbol": "coti",
       "image": "https://assets.coingecko.com/coins/images/2962/large/Coti.png?1559653863"
+  },
+  {
+      "name": "LonelyFans",
+      "id": "lonelyfans",
+      "symbol": "lof",
+      "image": "https://assets.coingecko.com/coins/images/21317/large/lof.png?1638926928"
   }
 ]
 
