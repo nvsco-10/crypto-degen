@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { useAppContext } from '../context/appContext'
 import IconBtn from './IconBtn'
 
 import {
@@ -15,6 +15,8 @@ import { GoSettings } from 'react-icons/go'
 
 
 const PortfolioOverview = () => {
+  const { portfolioBalance } = useAppContext()
+
   return (
     <Box display='flex' flexDirection='column' py={6} px={4}>
       <Box as='header' mb={8} display='flex' justifyContent='space-between'>
@@ -40,7 +42,7 @@ const PortfolioOverview = () => {
           <Text fontSize={{xs: 'md'}}>
             $
             <Text as='span' px={1} fontSize={{xs: 'xx-large'}}>
-              1000.00
+              {portfolioBalance.toLocaleString('en-US')}
             </Text>
             USD
           </Text>

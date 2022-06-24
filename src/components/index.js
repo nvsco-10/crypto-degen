@@ -13,7 +13,6 @@ import PortfolioOverview from "./PortfolioOverview";
 import IconBtn from "./IconBtn";
 import PortfolioMain from "./PortfolioMain";
 import PortfolioRow from "./PortfolioRow";
-import Portfolio from "./Portfolio"
 import CoinsRow from "./CoinsRow";
 import CoinsSearch from "./CoinsSearch";
 
@@ -31,7 +30,6 @@ export {
   IconBtn,
   PortfolioMain,
   PortfolioRow,
-  Portfolio,
   CoinsRow,
   CoinsSearch 
 }

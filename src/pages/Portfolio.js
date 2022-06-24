@@ -9,10 +9,10 @@ import {
 } from '@chakra-ui/react'
 
 const Portfolio = () => {
-  const { getWatchlist } = useAppContext()
+  const { getPortfolio } = useAppContext()
 
   useEffect(() => {
-    getWatchlist()
+    getPortfolio()
   },[])
 
   return (

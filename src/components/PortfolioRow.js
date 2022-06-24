@@ -1,7 +1,7 @@
 import React from 'react'
 import { HStack, Image, Text, Flex, StackDivider } from '@chakra-ui/react'
 
-const PortfolioRow = ({id, name, image, symbol, price, change, owned }) => {
+const PortfolioRow = ({id, name, image, symbol, price, change, qty }) => {
   return (
     <HStack 
       px={2} 
@@ -34,12 +34,12 @@ const PortfolioRow = ({id, name, image, symbol, price, change, owned }) => {
         </HStack>
         <Flex flexDir='column' px={2} alignItems='flex-end' >
           <Text fontSize={{xs: 'sm'}}>
-            {owned} {symbol?.toUpperCase()}
+            {qty} {symbol?.toUpperCase()}
           </Text>
           <Text as='span' fontSize={{xs: 'xs'}}>
-          { owned*price < 1 
-                    ? `$ ${(owned*price).toFixed(4).toLocaleString('en-US')}` 
-                    : `$ ${(owned*price).toLocaleString('en-US')}` }
+          { qty*price < 1 
+                    ? `$ ${(qty*price).toFixed(4).toLocaleString('en-US')}` 
+                    : `$ ${(qty*price).toLocaleString('en-US')}` }
           </Text>
         </Flex>
       </HStack>

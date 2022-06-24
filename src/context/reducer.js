@@ -2,12 +2,12 @@ import {
   GET_COINSDATA_BEGIN,
   GET_COINSDATA_SUCCESS,
   GET_COINSDATA_ERROR,
-  ADD_WATCHLIST_BEGIN,
-  ADD_WATCHLIST_SUCCESS,
-  ADD_WATCHLIST_ERROR,
-  GET_WATCHLIST_BEGIN,
-  GET_WATCHLIST_SUCCESS,
-  GET_WATCHLIST_ERROR,
+  ADD_PORTFOLIO_BEGIN,
+  ADD_PORTFOLIO_SUCCESS,
+  ADD_PORTFOLIO_ERROR,
+  GET_PORTFOLIO_BEGIN,
+  GET_PORTFOLIO_SUCCESS,
+  GET_PORTFOLIO_ERROR,
 
 } from './actions'
 
@@ -39,43 +39,44 @@ const reducer = (state, action) => {
     }
   }
 
-  if(action.type === ADD_WATCHLIST_BEGIN) {
+  if(action.type === ADD_PORTFOLIO_BEGIN) {
     return {
       ...state,
       isLoading: true
     }
   }
 
-  if(action.type === ADD_WATCHLIST_SUCCESS) {
+  if(action.type === ADD_PORTFOLIO_SUCCESS) {
     return {
       ...state,
       isLoading: false,
-      watchlist: action.payload.watchlist
+      portfolio: action.payload.portfolio
     }
   }
 
-  if(action.type === ADD_WATCHLIST_ERROR) {
+  if(action.type === ADD_PORTFOLIO_ERROR) {
     return {
       ...state
     }
   }
 
-  if (action.type === GET_WATCHLIST_BEGIN) {
+  if (action.type === GET_PORTFOLIO_BEGIN) {
     return {
       ...state,
       isLoading: true
     }
   }
 
-  if (action.type === GET_WATCHLIST_SUCCESS) {
+  if (action.type === GET_PORTFOLIO_SUCCESS) {
     return {
       ...state,
       isLoading: false,
-      watchlistData: action.payload.watchlistData
+      portfolioMarketData: action.payload.portfolioMarketData,
+      portfolioBalance: action.payload.portfolioBalance
     }
   }
 
-  if(action.type === GET_WATCHLIST_ERROR) {
+  if(action.type === GET_PORTFOLIO_ERROR) {
     return {
       ...state
     }

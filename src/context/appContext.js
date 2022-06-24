@@ -3,16 +3,18 @@ import React, { useReducer, useContext } from 'react'
 import reducer  from './reducer'
 import axios from 'axios'
 
+import portfolioMockData from '../utils/portfolioMockData.js'
+
 import { 
   GET_COINSDATA_BEGIN,
   GET_COINSDATA_SUCCESS,
   GET_COINSDATA_ERROR,
-  ADD_WATCHLIST_BEGIN, 
-  ADD_WATCHLIST_SUCCESS,
-  ADD_WATCHLIST_ERROR,
-  GET_WATCHLIST_BEGIN,
-  GET_WATCHLIST_SUCCESS,
-  GET_WATCHLIST_ERROR,
+  ADD_PORTFOLIO_BEGIN, 
+  ADD_PORTFOLIO_SUCCESS,
+  ADD_PORTFOLIO_ERROR,
+  GET_PORTFOLIO_BEGIN,
+  GET_PORTFOLIO_SUCCESS,
+  GET_PORTFOLIO_ERROR,
 } from './actions'
 
 const initialState = {
@@ -21,8 +23,9 @@ const initialState = {
   marketData: [],
   rCryptoData: [],
   rSatoshiData: [],
-  watchlist: [],
-  watchListData: []
+  portfolio: [],
+  portfolioMarketData: [],
+  portfolioBalance: 0,
 }
 
 const AppContext = React.createContext()
@@ -59,24 +62,24 @@ const AppProvider = ({ children }) => {
     }
   }
 
-  const addToWatchlist = (coinId) => {
+  const addToPortfolio = (coinId) => {
     // console.log(coinId)
-    dispatch({ type: ADD_WATCHLIST_BEGIN })
+    dispatch({ type: ADD_PORTFOLIO_BEGIN })
     try {
-      const { watchlist } = state
+      const { portfolio } = state
 
-      if (watchlist) {
-        const foundCoin = watchlist.find(coin => coin === coinId)
+      if (portfolio) {
+        const foundCoin = portfolio.find(coin => coin === coinId)
 
         if(foundCoin) {
           return
         }
 
-        const updatedList = [...watchlist, coinId]
+        const updatedList = [...portfolio, coinId]
         dispatch({
-          type: ADD_WATCHLIST_SUCCESS,
+          type: ADD_PORTFOLIO_SUCCESS,
           payload: {
-            watchlist: updatedList
+            portfolio: updatedList
           }
         })
 
@@ -84,9 +87,9 @@ const AppProvider = ({ children }) => {
       } 
 
       dispatch({
-        type: ADD_WATCHLIST_SUCCESS,
+        type: ADD_PORTFOLIO_SUCCESS,
         payload: {
-          watchlist: [coinId]
+          portfolio: [coinId]
         }
       })
 
@@ -96,30 +99,52 @@ const AppProvider = ({ children }) => {
     
   }
 
-  const getWatchlist = async () => {
-    dispatch({ type: GET_WATCHLIST_BEGIN })
+  const getPortfolio = async () => {
+    dispatch({ type: GET_PORTFOLIO_BEGIN })
 
     try {
-      // const { watchlist } = state
-      const watchlist = ['bitcoin', 'ethereum', 'solana', 'monero', 'dogecoin'];
+      // const { portfolio } = state
+      // const portfolio = ['bitcoin', 'ethereum', 'solana', 'monero', 'dogecoin'];
+      
       let ids = '';
 
-      for(let i=0; i<watchlist.length; i++) {
-        if(i < watchlist.length - 1) {
-          ids += `${watchlist[i]}%2C`
+      for(let i=0; i<portfolioMockData.length; i++) {
+        if(i < portfolioMockData.length - 1) {
+          ids += `${portfolioMockData[i].coinId}%2C`
         }
-        if(i === watchlist.length - 1) {
-          ids += watchlist[i]
+        if(i === portfolioMockData.length - 1) {
+          ids += portfolioMockData[i].coinId
         } 
       }
 
       const { data } = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
 
-      console.log(data)
+      // console.log(data)
+
+      let mergedData = [];
+      let totalBal = 0;
+
+      for (let i=0; i<portfolioMockData.length; i++) {
+        let obj = {
+          ...portfolioMockData[i],
+          "symbol": data[i].symbol,
+          "name": data[i].name,
+          "current_price": data[i].current_price,
+          "price_change_percentage_24h": data[i].price_change_percentage_24h,
+          "image": data[i].image
+        }
+        mergedData.push(obj)
+
+        totalBal += (portfolioMockData[i].qty * data[i].current_price)
+      }
+
+      console.log(mergedData)
+
       dispatch({
-        type: GET_WATCHLIST_SUCCESS,
+        type: GET_PORTFOLIO_SUCCESS,
         payload: {
-          watchlistData: data
+          portfolioMarketData: mergedData,
+          portfolioBalance: totalBal
         }
       })
 
@@ -137,8 +162,8 @@ const AppProvider = ({ children }) => {
       value={
         {...state,
           getCoinsData,
-          addToWatchlist,
-          getWatchlist
+          addToPortfolio,
+          getPortfolio
         }
       }
     >

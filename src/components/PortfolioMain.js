@@ -4,21 +4,21 @@ import PortfolioRow from './PortfolioRow'
 import { Box } from '@chakra-ui/react'
 
 const PortfolioMain = () => {
-  const { watchlistData } = useAppContext()
+  const { portfolioMarketData } = useAppContext()
 
   return (
     <Box backgroundColor='#1d2945' px={4} pb={6} >
-      {watchlistData?.length > 0 &&
-       watchlistData?.map(data => {
+      {portfolioMarketData?.length > 0 &&
+       portfolioMarketData?.map(data => {
         return (
           <PortfolioRow
-            key={data.id}
+            key={data.coinId}
             name={data.name}
             image={data.image}
             symbol={data.symbol}
             price={data.current_price}
             change={data.price_change_percentage_24h}
-            owned={25}
+            qty={data.qty}
           />
         )
        })
