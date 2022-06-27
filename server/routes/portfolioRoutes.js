@@ -1,9 +1,11 @@
 import express from 'express'
 const router = express.Router()
 
-import { addToPortfolio } from '../controllers/portfolioController.js'
+import { getPortfolio, buyCoin, sellCoin } from '../controllers/portfolioController.js'
 
 router.route('/')
-  .post(addToPortfolio)
+  .get(getPortfolio)
+  .patch(buyCoin)
+  .delete(sellCoin)
 
 export default router

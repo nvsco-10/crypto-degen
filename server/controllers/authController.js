@@ -24,7 +24,15 @@ const register = async (req, res) => {
   const user = await User.create(req.body)
   const token = user.createJWT()
 
-  const portfolio = await Portfolio.create({userId: user._id})
+  const portfolio = await Portfolio.create(
+    {
+      coins: {
+        coinId: 'tether',
+        qty: 0,
+      },
+      userId: user._id
+    }
+  )
 
   res.status(StatusCodes.CREATED).json({ 
     user: {
