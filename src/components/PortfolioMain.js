@@ -1,13 +1,13 @@
 import React from 'react'
 import { useAppContext } from '../context/appContext'
 import PortfolioRow from './PortfolioRow'
-import { Box } from '@chakra-ui/react'
+import { Box, useColorModeValue } from '@chakra-ui/react'
 
 const PortfolioMain = () => {
   const { portfolioMarketData } = useAppContext()
 
   return (
-    <Box backgroundColor='#1d2945' px={4} pb={6} >
+    <Box px={4} pb={6}  bg={useColorModeValue('gray.100', '#1d2945')}>
       {portfolioMarketData?.length > 0 &&
        portfolioMarketData?.map(data => {
         return (

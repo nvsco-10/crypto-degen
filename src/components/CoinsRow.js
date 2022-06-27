@@ -23,7 +23,6 @@ const CoinsRow = ({ id, name, symbol, image }) => {
       py={8}  
       justifyContent='space-between' 
       height='50px' 
-      
       borderBottom={useColorModeValue('solid 1px lightgray', 'solid 1px rgba(243, 235, 239, 0.11)')}
     >
         <HStack>

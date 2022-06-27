@@ -1,5 +1,5 @@
 import React from 'react'
-import { HStack, Image, Text, Flex, StackDivider } from '@chakra-ui/react'
+import { HStack, Image, Text, Flex, StackDivider, useColorModeValue } from '@chakra-ui/react'
 
 const PortfolioRow = ({id, name, image, symbol, price, change, qty }) => {
   return (
@@ -8,7 +8,7 @@ const PortfolioRow = ({id, name, image, symbol, price, change, qty }) => {
       py={8}  
       justifyContent='space-between' 
       height='50px' 
-      borderBottom={'solid rgba(243, 235, 239, 0.11) 1px'}
+      borderBottom={useColorModeValue('solid 1px lightgray', 'solid 1px rgba(243, 235, 239, 0.11)')}
     >
         <HStack>
           <Image
