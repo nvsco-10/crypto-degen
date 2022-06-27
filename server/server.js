@@ -14,6 +14,7 @@ import connectDB from './db/connect.js'
 
 // routers
 import authRouter from './routes/authRoutes.js'
+import portfolioRouter from './routes/portfolioRoutes.js'
 
 import notFoundMiddleware from './middleware/not-found.js'
 import errorHandlerMiddleware from './middleware/error-handler.js'
@@ -31,6 +32,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 app.use(express.json())
 
 app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/portfolio', authenticateUser, portfolioRouter)
 
 // only when ready to deploy
 // app.get('*', (req, res) => {

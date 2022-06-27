@@ -3,30 +3,6 @@ import bcrypt from 'bcryptjs'
 import validator from 'validator'
 import jwt from 'jsonwebtoken'
 
-// Schema to create portfolio item - not a mongoose model
-const portfolioItemSchema = new mongoose.Schema(
-  {
-    // id from coingecko
-    coinId: {
-      type: String,
-      required: [true, 'Please provide a coinId'],
-      trim: true,
-    },
-    qty: {
-      type: Number,
-      default: 0,
-      trim: true
-    },
-  },
-  {
-    toJSON: {
-      virtuals: true,
-    },
-    id: false,
-    timestamps: true
-  }
-)
-
 const UserSchema = new mongoose.Schema(
   {
   username: {
@@ -50,8 +26,7 @@ const UserSchema = new mongoose.Schema(
     required: [true, 'Please provide a password'],
     minlength: 6,
     select: false,
-  },
-  portfolio: [portfolioItemSchema]
+  }
   },
   {
     toJSON: {
