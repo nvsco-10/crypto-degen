@@ -9,7 +9,8 @@ const portfolioItemSchema = new mongoose.Schema(
     // id from coingecko
     coinId: {
       type: String,
-      ref: 'Coin' 
+      required: [true, 'Please provide a coinId'],
+      trim: true,
     },
     qty: {
       type: Number,
