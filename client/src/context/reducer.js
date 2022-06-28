@@ -1,13 +1,19 @@
 import {
+  DISPLAY_ALERT,
+  CLEAR_ALERT,
+  SETUP_USER_BEGIN,
+  SETUP_USER_SUCCESS,
+  SETUP_USER_ERROR,
+  LOGOUT_USER,
   HANDLE_CHANGE,
   GET_COINDATA_SUCCESS,
   GET_COINDATA_ERROR,
   GET_COINSDATA_BEGIN,
   GET_COINSDATA_SUCCESS,
   GET_COINSDATA_ERROR,
-  ADD_PORTFOLIO_BEGIN,
-  ADD_PORTFOLIO_SUCCESS,
-  ADD_PORTFOLIO_ERROR,
+  BUY_COIN_BEGIN,
+  BUY_COIN_SUCCESS,
+  BUY_COIN_ERROR,
   GET_PORTFOLIO_BEGIN,
   GET_PORTFOLIO_SUCCESS,
   GET_PORTFOLIO_ERROR,
@@ -17,6 +23,58 @@ import {
 import { initialState } from './appContext'
 
 const reducer = (state, action) => {
+
+  if (action.type === DISPLAY_ALERT) {
+    return {
+      ...state,
+      showAlert: true,
+      alertType: 'danger',
+      alertText: 'Please provide all values!',
+    }
+  }
+
+  if (action.type === CLEAR_ALERT) {
+    return {
+      ...state,
+      showAlert: false,
+      alertType: '',
+      alertText: '',
+    }
+  }
+
+  if (action.type === SETUP_USER_BEGIN) {
+    return { ...state, isLoading: true }
+  }
+
+  if (action.type === SETUP_USER_SUCCESS) {
+    return {
+      ...state,
+      isLoading: true,
+      token: action.payload.token,
+      user: action.payload.user,
+      showAlert: true,
+      alertType: 'success',
+      alertText: action.payload.alertText,
+    }
+  }
+
+  if (action.type === SETUP_USER_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'danger',
+      alertText: action.payload.msg,
+    }
+  }
+
+  if (action.type === LOGOUT_USER) {
+    return {
+      ...initialState,
+      user: null,
+      token: null,
+    }
+  }
 
   if (action.type === HANDLE_CHANGE) {
     return {
@@ -63,14 +121,14 @@ const reducer = (state, action) => {
     }
   }
 
-  if(action.type === ADD_PORTFOLIO_BEGIN) {
+  if(action.type === BUY_COIN_BEGIN) {
     return {
       ...state,
       isLoading: true
     }
   }
 
-  if(action.type === ADD_PORTFOLIO_SUCCESS) {
+  if(action.type === BUY_COIN_SUCCESS) {
     return {
       ...state,
       isLoading: false,
@@ -78,7 +136,7 @@ const reducer = (state, action) => {
     }
   }
 
-  if(action.type === ADD_PORTFOLIO_ERROR) {
+  if(action.type === BUY_COIN_ERROR) {
     return {
       ...state
     }

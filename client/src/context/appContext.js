@@ -6,22 +6,36 @@ import axios from 'axios'
 import portfolioMockData from '../utils/portfolioMockData.js'
 
 import { 
+  DISPLAY_ALERT,
+  CLEAR_ALERT,
+  SETUP_USER_BEGIN,
+  SETUP_USER_SUCCESS,
+  SETUP_USER_ERROR,
+  LOGOUT_USER,
   HANDLE_CHANGE,
   GET_COINDATA_SUCCESS,
   GET_COINDATA_ERROR,
   GET_COINSDATA_BEGIN,
   GET_COINSDATA_SUCCESS,
   GET_COINSDATA_ERROR,
-  ADD_PORTFOLIO_BEGIN, 
-  ADD_PORTFOLIO_SUCCESS,
-  ADD_PORTFOLIO_ERROR,
+  BUY_COIN_BEGIN, 
+  BUY_COIN_SUCCESS,
+  BUY_COIN_ERROR,
   GET_PORTFOLIO_BEGIN,
   GET_PORTFOLIO_SUCCESS,
   GET_PORTFOLIO_ERROR,
 } from './actions'
 
+const token = localStorage.getItem('token')
+const user = localStorage.getItem('user')
+
 const initialState = {
+  user: user ? JSON.parse(user) : null,
+  token: token,
   isLoading: false,
+  showAlert: false,
+  alertText: '',
+  alertType: '',
   trendingData: [],
   marketData: [],
   rCryptoData: [],
@@ -39,6 +53,82 @@ const AppContext = React.createContext()
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  // axios
+  const authFetch = axios.create({
+    baseURL: '/api/v1',
+  })
+
+  // request
+  authFetch.interceptors.request.use(
+    (config) => {
+      config.headers.common['Authorization'] = `Bearer ${state.token}`
+      return config
+    },
+    (error) => {
+      return Promise.reject(error)
+    }
+  )
+
+  // response
+  authFetch.interceptors.response.use(
+    (response) => {
+      return response
+    },
+    (error) => {
+      // console.log(error.response)
+      if (error.response.status === 401) {
+        logoutUser()
+      }
+      return Promise.reject(error)
+    }
+  )
+
+  const displayAlert = () => {
+    dispatch({ type: DISPLAY_ALERT })
+    clearAlert()
+  }
+
+  const clearAlert = () => {
+    setTimeout(() => {
+      dispatch({ type: CLEAR_ALERT })
+    }, 3000)
+  }
+
+  const addUserToLocalStorage = ({ user, token }) => {
+    localStorage.setItem('user', JSON.stringify(user))
+    localStorage.setItem('token', token)
+  }
+
+  const removeUserFromLocalStorage = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+  }
+
+  const setupUser = async ({ currentUser, endPoint, alertText }) => {
+    dispatch({ type: SETUP_USER_BEGIN })
+    try {
+      const { data } = await axios.post(`/api/v1/auth/${endPoint}`, currentUser)
+
+      const { user, token } = data
+      dispatch({
+        type: SETUP_USER_SUCCESS,
+        payload: { user, token, alertText },
+      })
+      addUserToLocalStorage({ user, token })
+    } catch (error) {
+      dispatch({
+        type: SETUP_USER_ERROR,
+        payload: { msg: error.response.data.msg },
+      })
+    }
+    clearAlert()
+  }
+
+  const logoutUser = () => {
+    dispatch({ type: LOGOUT_USER })
+    removeUserFromLocalStorage()
+  }
 
   const handleChange = ({ name, value }) => {
     dispatch({ type: HANDLE_CHANGE, payload: { name, value } })
@@ -89,9 +179,9 @@ const AppProvider = ({ children }) => {
     }
   }
 
-  const addToPortfolio = (coinId) => {
+  const buyCoin = (coinId) => {
     // console.log(coinId)
-    dispatch({ type: ADD_PORTFOLIO_BEGIN })
+    dispatch({ type: BUY_COIN_BEGIN })
     try {
       const { portfolio } = state
 
@@ -104,7 +194,7 @@ const AppProvider = ({ children }) => {
 
         const updatedList = [...portfolio, coinId]
         dispatch({
-          type: ADD_PORTFOLIO_SUCCESS,
+          type: BUY_COIN_SUCCESS,
           payload: {
             portfolio: updatedList
           }
@@ -114,7 +204,7 @@ const AppProvider = ({ children }) => {
       } 
 
       dispatch({
-        type: ADD_PORTFOLIO_SUCCESS,
+        type: BUY_COIN_SUCCESS,
         payload: {
           portfolio: [coinId]
         }
@@ -130,7 +220,7 @@ const AppProvider = ({ children }) => {
     dispatch({ type: GET_PORTFOLIO_BEGIN })
 
     try {
-      // const { portfolio } = state
+      const { portfolio } = state
       
       let ids = '';
 
@@ -192,10 +282,13 @@ const AppProvider = ({ children }) => {
     <AppContext.Provider
       value={
         {...state,
+          displayAlert,
+          setupUser,
+          logoutUser,
           handleChange,
           getCoinsData,
           getCoinData,
-          addToPortfolio,
+          buyCoin,
           getPortfolio
         }
       }

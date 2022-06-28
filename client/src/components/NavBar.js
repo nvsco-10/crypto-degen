@@ -2,6 +2,8 @@ import { useState } from 'react'
 import logo from '../assets/images/logo.png'
 import logolight from '../assets/images/logo-light.png'
 
+import { Login } from '.'
+
 // Chakra imports
 import {
   Container,
@@ -22,6 +24,13 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
   Popover,
   PopoverTrigger,
   PopoverContent,
@@ -42,8 +51,10 @@ import navItems from '../utils/navItems.js'
 
 const NavBar = () => {
   const { isOpen, onToggle } = useDisclosure();
+  const { isOpen: modalIsOpen, onOpen, onClose } = useDisclosure()
   const [ isLoggedIn, setIsLoggedIn ] = useState(false)
   const { colorMode, toggleColorMode } = useColorMode()
+
 
   return (
     <Container 
@@ -140,6 +151,9 @@ const NavBar = () => {
             </Menu>
           )
             } */}
+            
+          <Button onClick={onOpen}>Log In</Button>
+          <Login onClose={onClose} isOpen={modalIsOpen} />
 
           <Button onClick={toggleColorMode}>
             {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}

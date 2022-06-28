@@ -1,6 +1,8 @@
 import NavBar from "./NavBar";
 import Footer from "./Footer";
 
+import Login from "./Login";
+
 // home
 import HeadingWIcon from "./HeadingWIcon";
 import CoinNameWIcon from "./CoinNameWIcon";
@@ -27,6 +29,7 @@ import CoinsSearch from "./CoinsSearch";
 export { 
   NavBar, 
   Footer,
+  Login,
   HeadingWIcon, 
   CoinNameWIcon,
   CoinValue,
