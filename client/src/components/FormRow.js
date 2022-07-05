@@ -17,13 +17,13 @@ import {
   ViewOffIcon
 } from '@chakra-ui/icons'
 
-const FormRow = ({name, label, type, value, handleChange, isMember}) => {
+import validateEmail from '../utils/validateEmail.js'
+
+const FormRow = ({name, label, type, value, handleChange, isMember, isError}) => {
   const [show, setShow] = useState(false)
 
-  const isError = value === ''
-
   return (
-    <FormControl>
+    <FormControl isInvalid={isError}>
       <FormLabel 
         htmlFor='email' 
         fontSize='sm'
@@ -46,6 +46,9 @@ const FormRow = ({name, label, type, value, handleChange, isMember}) => {
               fontSize='sm'
               pr='4.5rem'
               type={show ? 'text' : 'password'}
+              name={name}
+              value={value}
+              onChange={handleChange}
               placeholder={`Enter your ${label || name}..`}
             />
             <InputRightElement width='3rem'>
@@ -62,13 +65,16 @@ const FormRow = ({name, label, type, value, handleChange, isMember}) => {
           </InputGroup>
       }
       
-      {type === "password" && !isError && !isMember ? (
+      {(type === "password" && !isMember) && 
         <FormHelperText fontSize='xs'>
           Password should have a minimum length of 6 characters.
         </FormHelperText>
-      ) : (
-        <FormErrorMessage>{name} is required.</FormErrorMessage>
-      )}
+      }
+      {(type === "email" && isError) && 
+        <FormErrorMessage fontSize='xs'>
+          Please enter a valid email.
+        </FormErrorMessage>
+      }
     </FormControl>
   )
 }

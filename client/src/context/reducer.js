@@ -70,7 +70,14 @@ const reducer = (state, action) => {
 
   if (action.type === LOGOUT_USER) {
     return {
-      ...initialState,
+      ...state,
+      // portfolio: [],
+      // portfolioMarketData: [],
+      // portfolioBalance: 0,
+      // tetherBalance: 0,
+      // coinId: '',
+      // coinData: {},
+      // qty: 0,
       user: null,
       token: null,
     }

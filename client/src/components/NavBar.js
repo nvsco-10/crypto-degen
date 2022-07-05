@@ -1,6 +1,9 @@
-import { useState } from 'react' 
+import { useState, useEffect } from 'react' 
+import { useAppContext } from '../context/appContext'
 import logo from '../assets/images/logo.png'
 import logolight from '../assets/images/logo-light.png'
+
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import { Login } from '.'
 
@@ -52,8 +55,25 @@ import navItems from '../utils/navItems.js'
 const NavBar = () => {
   const { isOpen, onToggle } = useDisclosure();
   const { isOpen: modalIsOpen, onOpen, onClose } = useDisclosure()
-  const [ isLoggedIn, setIsLoggedIn ] = useState(false)
+  const { user, logoutUser } = useAppContext()
+
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const { colorMode, toggleColorMode } = useColorMode()
+
+  const logout = () => {
+    logoutUser()
+
+    if(location.pathname === '/') {
+      navigate(0)
+    }
+
+    if(location.pathname === '/trade-simulator') {
+      navigate('/')
+    }
+    
+  }
 
 
   return (
@@ -112,21 +132,11 @@ const NavBar = () => {
           direction={'row'}
           spacing={6}>
 
-          {/* { !isLoggedIn ? (
+          { !user ? (
             <>
-          <Button
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize={'sm'}
-            fontWeight={600}
-            color={'white'}
-            bg={'blue.400'}
-            href={'#'}
-            _hover={{
-              bg: 'blue.300',
-            }}>
-            Sign Up
-          </Button>
-          </>
+              <Button onClick={onOpen} fontSize='sm' bg='transparent'>Log In</Button>
+              <Login onClose={onClose} isOpen={modalIsOpen} />
+            </>
           ) : (
           <Menu>
               <MenuButton
@@ -143,18 +153,16 @@ const NavBar = () => {
                 />
               </MenuButton>
               <MenuList zIndex='popover'>
-                <MenuItem>Link 1</MenuItem>
-                <MenuItem>Link 2</MenuItem>
+                <MenuItem>Profile</MenuItem>
                 <MenuDivider />
-                <MenuItem>Link 3</MenuItem>
+                <MenuItem onClick={() => logout()}>
+                  Logout
+                </MenuItem>
               </MenuList>
             </Menu>
           )
-            } */}
+            }
             
-          <Button onClick={onOpen}>Log In</Button>
-          <Login onClose={onClose} isOpen={modalIsOpen} />
-
           <Button onClick={toggleColorMode}>
             {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
           </Button>

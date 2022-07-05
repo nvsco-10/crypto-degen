@@ -128,6 +128,7 @@ const AppProvider = ({ children }) => {
   const logoutUser = () => {
     dispatch({ type: LOGOUT_USER })
     removeUserFromLocalStorage()
+    // getCoinsData()
   }
 
   const handleChange = ({ name, value }) => {

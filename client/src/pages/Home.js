@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 
 const Home = () => {
-  const { isLoading, getCoinsData } = useAppContext()
+  const { user, isLoading, getCoinsData } = useAppContext()
 
   useEffect(() => {
     getCoinsData()

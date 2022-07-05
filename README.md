@@ -2,12 +2,12 @@
 ![MIT License](https://img.shields.io/badge/license-MIT-blue)
 
 <p align="center">
-  <img src="./src/assets/images/logo-light.png" alt="crypto degen"/>
+  <img src="./client/src/assets/images/logo-light.png" alt="crypto degen"/>
 </p>
 
-- Build in progress...
-- Cryptocurrency news, market data, and crypto trade simulator(coming soon).
+- Cryptocurrency news and market data.
 - Get the latest and hottest scoop from Reddit's most popular cryptocurrency subreddits - r/CryptoCurrency and r/SatoshiStreetBets.
+- **Future development plans - trade simulator
 
 ## APIs Used
 
