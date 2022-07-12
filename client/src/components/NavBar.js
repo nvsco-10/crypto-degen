@@ -132,7 +132,7 @@ const NavBar = () => {
           direction={'row'}
           spacing={6}>
 
-          { !user ? (
+          {/* { !user ? (
             <>
               <Button onClick={onOpen} fontSize='sm' bg='transparent'>Log In</Button>
               <Login onClose={onClose} isOpen={modalIsOpen} />
@@ -161,7 +161,7 @@ const NavBar = () => {
               </MenuList>
             </Menu>
           )
-            }
+            } */}
             
           <Button onClick={toggleColorMode}>
             {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}

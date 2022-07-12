@@ -6,6 +6,7 @@ import {
   SETUP_USER_ERROR,
   LOGOUT_USER,
   HANDLE_CHANGE,
+  CLEAR_VALUES,
   GET_COINDATA_SUCCESS,
   GET_COINDATA_ERROR,
   GET_COINSDATA_BEGIN,
@@ -89,6 +90,18 @@ const reducer = (state, action) => {
       [action.payload.name]: action.payload.value,
     }
   }
+
+  if (action.type === CLEAR_VALUES) {
+    return {
+      ...state,
+      coinId: '',
+      qty: 0,
+      endingBalance: 0,
+    }
+  }
+
+
+
 
   if (action.type === GET_COINDATA_SUCCESS) {
     return {

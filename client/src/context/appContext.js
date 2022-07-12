@@ -3,8 +3,6 @@ import React, { useReducer, useContext } from 'react'
 import reducer  from './reducer'
 import axios from 'axios'
 
-import portfolioMockData from '../utils/portfolioMockData.js'
-
 import { 
   DISPLAY_ALERT,
   CLEAR_ALERT,
@@ -13,6 +11,7 @@ import {
   SETUP_USER_ERROR,
   LOGOUT_USER,
   HANDLE_CHANGE,
+  CLEAR_VALUES,
   GET_COINDATA_SUCCESS,
   GET_COINDATA_ERROR,
   GET_COINSDATA_BEGIN,
@@ -47,6 +46,7 @@ const initialState = {
   coinId: '',
   coinData: {},
   qty: 0,
+  endingBalance: 0
 }
 
 const AppContext = React.createContext()
@@ -93,6 +93,10 @@ const AppProvider = ({ children }) => {
     setTimeout(() => {
       dispatch({ type: CLEAR_ALERT })
     }, 3000)
+  }
+
+  const clearValues = () => {
+    dispatch({ type: CLEAR_VALUES })
   }
 
   const addUserToLocalStorage = ({ user, token }) => {
@@ -180,37 +184,28 @@ const AppProvider = ({ children }) => {
     }
   }
 
-  const buyCoin = (coinId) => {
+  const buyCoin = (coinId,qty) => {
     // console.log(coinId)
+
     dispatch({ type: BUY_COIN_BEGIN })
     try {
-      const { portfolio } = state
+      let userPortfolio = JSON.parse(localStorage.getItem('userPortfolio') || '[]')
 
-      if (portfolio) {
-        const foundCoin = portfolio.find(coin => coin === coinId)
+      if (userPortfolio.length > 0) {
+        const updatedPortfolio = userPortfolio.map(coin => 
+          coin.coinId === coinId ? {...coin, qty: coin.qty + qty} : coin
+        )
+        console.log(userPortfolio)
 
-        if(foundCoin) {
-          return
-        }
-
-        const updatedList = [...portfolio, coinId]
-        dispatch({
-          type: BUY_COIN_SUCCESS,
-          payload: {
-            portfolio: updatedList
-          }
-        })
-
-        return
-      } 
-
-      dispatch({
-        type: BUY_COIN_SUCCESS,
-        payload: {
-          portfolio: [coinId]
-        }
-      })
-
+        localStorage.setItem('userPortfolio', JSON.stringify(updatedPortfolio))
+      } else {
+        userPortfolio.push({coinId,qty})
+        localStorage.setItem('userPortfolio', JSON.stringify(userPortfolio))
+      }
+      
+      getPortfolio()
+      clearValues()
+      
     } catch (error) {
       console.log(error)
     }
@@ -221,54 +216,62 @@ const AppProvider = ({ children }) => {
     dispatch({ type: GET_PORTFOLIO_BEGIN })
 
     try {
-      const { portfolio } = state
-      
-      let ids = '';
+      // const { portfolio } = state
+      // localStorage.removeItem('userPortfolio');
 
-      for(let i=0; i<portfolioMockData.length; i++) {
-        if(i < portfolioMockData.length - 1) {
-          ids += `${portfolioMockData[i].coinId}%2C`
+      const userPortfolio = JSON.parse(localStorage.getItem('userPortfolio') || '[]')
+      console.log(userPortfolio)
+
+      // get coin data if user portfolio is not empty
+      if(userPortfolio.length > 0) {
+        let ids = '';
+
+        for(let i=0; i<userPortfolio.length; i++) {
+          if(i < userPortfolio.length - 1) {
+            ids += `${userPortfolio[i].coinId}%2C`
+          }
+          if(i === userPortfolio.length - 1) {
+            ids += userPortfolio[i].coinId
+          } 
         }
-        if(i === portfolioMockData.length - 1) {
-          ids += portfolioMockData[i].coinId
-        } 
+
+        const { data } = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
+
+        let mergedData = [];
+        let totalBal = 0;
+        let tetherBal = 0;
+
+        for (let i=0; i<userPortfolio.length; i++) {
+          const coinData = data.find(coin => coin.id === userPortfolio[i].coinId)
+
+          let obj = {
+            ...userPortfolio[i],
+            "current_balance": userPortfolio[i].qty * coinData.current_price,
+            "symbol": coinData.symbol,
+            "name": coinData.name,
+            "current_price": coinData.current_price,
+            "price_change_percentage_24h": coinData.price_change_percentage_24h,
+            "image": coinData.image
+          }
+          mergedData.push(obj)
+
+          totalBal += (userPortfolio[i].qty * coinData.current_price)
+          
+          if(userPortfolio[i].coinId === 'tether') {
+            tetherBal = obj.current_balance
+          }
+        }
+
+        dispatch({
+          type: GET_PORTFOLIO_SUCCESS,
+          payload: {
+            portfolioMarketData: mergedData,
+            portfolioBalance: totalBal,
+            tetherBalance: tetherBal
+          }
+        })
       }
 
-      const { data } = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
-
-      let mergedData = [];
-      let totalBal = 0;
-      let tetherBal = 0;
-
-      for (let i=0; i<portfolioMockData.length; i++) {
-        const coinData = data.find(coin => coin.id === portfolioMockData[i].coinId)
-
-        let obj = {
-          ...portfolioMockData[i],
-          "current_balance": portfolioMockData[i].qty * coinData.current_price,
-          "symbol": coinData.symbol,
-          "name": coinData.name,
-          "current_price": coinData.current_price,
-          "price_change_percentage_24h": coinData.price_change_percentage_24h,
-          "image": coinData.image
-        }
-        mergedData.push(obj)
-
-        totalBal += (portfolioMockData[i].qty * coinData.current_price)
-        
-        if(portfolioMockData[i].coinId === 'tether') {
-          tetherBal = obj.current_balance
-        }
-      }
-
-      dispatch({
-        type: GET_PORTFOLIO_SUCCESS,
-        payload: {
-          portfolioMarketData: mergedData,
-          portfolioBalance: totalBal,
-          tetherBalance: tetherBal
-        }
-      })
 
     } catch (error) {
       console.log(error)
