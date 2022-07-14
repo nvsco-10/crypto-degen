@@ -34,7 +34,7 @@ const PortfolioRow = ({id, name, image, symbol, price, change, qty }) => {
         </HStack>
         <Flex flexDir='column' px={2} alignItems='flex-end' >
           <Text fontSize={{xs: 'sm'}}>
-            {qty} {symbol?.toUpperCase()}
+            {qty.toLocaleString('en-US')} {symbol?.toUpperCase()}
           </Text>
           <Text as='span' fontSize={{xs: 'xs'}}>
           { qty*price < 1 

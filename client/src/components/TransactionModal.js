@@ -15,9 +15,11 @@ const TransactionModal = ({onClose, isOpen, type}) => {
   const { tetherBalance, getCoinData, coinData, coinId, qty, handleChange } = useAppContext()
 
   const renderModal = () => {
-    if(type === 'buy') {
-      return <BuyModal />
+    if(type === 'buy' || type === 'sell') {
+      return <BuyModal type={type} />
     }
+
+
 
     if(type === 'transfer') {
       return <TransferModal />

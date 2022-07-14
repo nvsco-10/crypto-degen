@@ -175,7 +175,8 @@ const reducer = (state, action) => {
       isLoading: false,
       portfolioMarketData: action.payload.portfolioMarketData,
       portfolioBalance: action.payload.portfolioBalance,
-      tetherBalance: action.payload.tetherBalance
+      tetherBalance: action.payload.tetherBalance,
+      tetherQty: action.payload.tetherQty
     }
   }
 

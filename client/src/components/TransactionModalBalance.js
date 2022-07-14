@@ -18,7 +18,7 @@ const TransactionModalBalance = ({label, amount, size, position}) => {
     <Text alignSelf={position} fontWeight={600} fontSize={textSize()}>
       {label}:
       <Text as='span' fontWeight={400} fontSize={{xs: 'md'}} ml={2}>
-      {`$ ${amount ? formatDollar(amount) : '-'}`}
+      {amount ? formatDollar(amount) : '-'}
       </Text>
     </Text>
   )

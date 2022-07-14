@@ -14,7 +14,7 @@ import {
   Button,
   InputGroup,
   Input,
-  InputRightAddon,
+  InputRightElement,
   FormControl,
   FormLabel,
   VStack,
@@ -42,18 +42,23 @@ const list = [
 
 
 const TransferModal = () => {
-  const { tetherBalance, getCoinData, coinData, qty, handleChange, buyCoin } = useAppContext()
+  const { tetherBalance, tetherQty, getCoinData, coinData, qty, handleChange, depositTether, withdrawTether } = useAppContext()
   const [type, setType] = useState('')
   const [disable, setDisable] = useState(true)
   const [endingBal, setEndingBal] = useState(0)
 
   const handleSelect = (e) => {
+    getCoinData('tether')
     setType(e.value)
   }
 
   const handleQtyInput = (e) => {
     const name = e.target.name
     const value = e.target.value
+
+    if(qty) {
+      setDisable(false)
+    }
 
     handleChange({ name, value })
   }
@@ -63,11 +68,11 @@ const TransferModal = () => {
       let balance;
 
       if (type === 'deposit') {
-        balance = formatDollar(tetherBalance + parseFloat(qty))
+        balance = formatDollar(tetherBalance + parseFloat(qty * coinData.current_price))
       }
 
       if (type === 'withdraw') {
-        balance = formatDollar(tetherBalance - qty)
+        balance = formatDollar(tetherBalance - parseFloat(qty * coinData.current_price))
       }
 
       const amount = parseFloat(balance)
@@ -85,9 +90,19 @@ const TransferModal = () => {
     return '-'
   }
 
+  const setMax = () => {
+    const maxQty = tetherBalance / coinData.current_price
+    console.log(maxQty)
+    handleChange({ name: 'qty', value: maxQty })
+  }
+
   const handleSubmit = () => {
     if(type === 'deposit') {
-      buyCoin('tether',parseFloat(qty))
+      depositTether(parseFloat(qty))
+    }
+
+    if(type === 'withdraw') {
+      withdrawTether(parseFloat(qty))
     }
   }
 
@@ -99,7 +114,7 @@ const TransferModal = () => {
     <>
       <ModalHeader>
         <TransactionModalBalance
-          label='Tether Balance'
+          label='Available Balance'
           amount={tetherBalance}
           size='md'
         />
@@ -113,23 +128,30 @@ const TransferModal = () => {
               options={list}
               onChange={handleSelect}
             />
-            {/* <TransactionModalBalance
-              label='Current Price'
+            <TransactionModalBalance
+              label='Current USDT Price'
               amount={coinData && coinData.current_price}
               size='sm'
               position='flex-end'
-            /> */}
+            />
           </Box>
               
           <InputGroup size='md'>
             <Input 
               type='num' 
-              placeholder='USDT'
+              placeholder='qty'
               name='qty' 
               value={qty}
               onChange={handleQtyInput}
             />
-            <InputRightAddon children='USDT' />
+            { (type && type === 'withdraw') &&
+              <InputRightElement width='4.5rem'>
+                <Button h='1.75rem' size='sm' onClick={() => setMax()} >
+                  max
+                </Button>
+              </InputRightElement>
+            }
+            
           </InputGroup>
           <VStack 
             alignItems='flex-end' 
@@ -146,7 +168,7 @@ const TransferModal = () => {
         </VStack>
       </ModalBody>
       <ModalFooter>
-        <Button onClick={handleSubmit} w='100%' isDisabled={disable}>Buy</Button>
+        <Button onClick={handleSubmit} w='100%' isDisabled={disable}>{type === 'deposit' ? 'Deposit' : 'Withdraw'}</Button>
       </ModalFooter>
     </>
   )

@@ -43,9 +43,11 @@ const initialState = {
   portfolioMarketData: [],
   portfolioBalance: 0,
   tetherBalance: 0,
+  tetherQty: 0,
   coinId: '',
   coinData: {},
   qty: 0,
+  availableQty: 0,
   endingBalance: 0
 }
 
@@ -184,25 +186,29 @@ const AppProvider = ({ children }) => {
     }
   }
 
-  const buyCoin = (coinId,qty) => {
-    // console.log(coinId)
-
-    dispatch({ type: BUY_COIN_BEGIN })
+  const buyCoin = async (coinId,qty,price) => {
     try {
+      const tetherAmount = await convertToTether(qty,price);
+      console.log(tetherAmount)
+     
       let userPortfolio = JSON.parse(localStorage.getItem('userPortfolio') || '[]')
+      let updatedPortfolio = [];
+        
+      // is coin in portfolio?
+      const foundCoin = userPortfolio.find(coin => coin.coinId === coinId)
 
-      if (userPortfolio.length > 0) {
-        const updatedPortfolio = userPortfolio.map(coin => 
-          coin.coinId === coinId ? {...coin, qty: coin.qty + qty} : coin
-        )
-        console.log(userPortfolio)
-
-        localStorage.setItem('userPortfolio', JSON.stringify(updatedPortfolio))
+      // if coin exists, update qty
+      if(foundCoin) {
+        updatedPortfolio = userPortfolio.map(coin => 
+          coin.coinId === coinId ? {...coin, qty: coin.qty + qty} : coin)
       } else {
-        userPortfolio.push({coinId,qty})
-        localStorage.setItem('userPortfolio', JSON.stringify(userPortfolio))
+        // if not, add to existing portfolio
+        updatedPortfolio = [...userPortfolio, {coinId,qty}]
       }
-      
+
+      localStorage.setItem('userPortfolio', JSON.stringify(updatedPortfolio))
+      withdrawTether(tetherAmount)
+
       getPortfolio()
       clearValues()
       
@@ -210,6 +216,119 @@ const AppProvider = ({ children }) => {
       console.log(error)
     }
     
+  }
+
+  const sellCoin = async (coinId,qty,price) => {
+    try {
+      const tetherAmount = await convertToTether(qty,price);
+      let userPortfolio = JSON.parse(localStorage.getItem('userPortfolio') || '[]')
+      let updatedPortfolio = [];
+
+      if (userPortfolio) {
+        const foundCoin = userPortfolio.find(coin => coin.coinId === coinId)
+
+        if (foundCoin && foundCoin.qty === qty) {
+          updatedPortfolio = userPortfolio.filter(coin => coin.coinId !== coinId)
+        }
+
+        if (foundCoin && foundCoin.qty !== qty) {
+          updatedPortfolio = userPortfolio.map(coin => 
+            coin.coinId === coinId ? {...coin, qty: coin.qty - qty} : coin
+          )
+        }
+        
+        localStorage.setItem('userPortfolio', JSON.stringify(updatedPortfolio))
+      } 
+
+      depositTether(tetherAmount)
+      
+      clearValues()
+      getPortfolio()
+      
+      
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
+
+  const depositTether = (qty) => {
+    try {
+      let userPortfolio = JSON.parse(localStorage.getItem('userPortfolio') || '[]')
+      
+      if (userPortfolio.length > 0) { 
+        let updatedPortfolio = [];
+        const foundCoin = userPortfolio.find(coin => coin.coinId === 'tether')
+
+        // if coin exists, update qty
+        if(foundCoin) {
+          updatedPortfolio = userPortfolio.map(coin => 
+            coin.coinId === 'tether' ? {...coin, qty: coin.qty + qty} : coin
+          )
+        } else {
+          // if not, add to portfolio
+          updatedPortfolio = [...userPortfolio, {coinId: 'tether', qty}]
+        }
+
+        localStorage.setItem('userPortfolio', JSON.stringify(updatedPortfolio))
+        
+      } else {
+        userPortfolio.push({coinId:'tether',qty})
+        localStorage.setItem('userPortfolio', JSON.stringify(userPortfolio))
+      }
+
+      clearValues()
+      getPortfolio()
+
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
+  const withdrawTether = (qty) => {
+    try {
+      const coinId = 'tether'
+      let userPortfolio = JSON.parse(localStorage.getItem('userPortfolio') || '[]')
+
+      if (userPortfolio.length > 0) {
+        let updatedPortfolio;
+
+        const foundCoin = userPortfolio.find(coin => coin.coinId === coinId)
+
+        if (foundCoin && foundCoin.qty === qty) {
+          updatedPortfolio = userPortfolio.filter(coin => coin.coinId !== coinId)
+        }
+
+        if (foundCoin && foundCoin.qty !== qty) {
+          updatedPortfolio = userPortfolio.map(coin => 
+            coin.coinId === coinId ? {...coin, qty: coin.qty - qty} : coin
+          )
+        }
+        
+        localStorage.setItem('userPortfolio', JSON.stringify(updatedPortfolio))
+      } 
+      
+      clearValues()
+      getPortfolio()
+      
+      
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
+
+  const convertToTether = async (qty,price) => {
+    const { data } = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=tether&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
+
+    // get coin's fiat amount
+    const convertedAmount = qty*price
+
+    // get amount of tether needed to buy coin
+    const tetherAmount = convertedAmount / data[0].current_price
+
+    return tetherAmount
   }
 
   const getPortfolio = async () => {
@@ -221,6 +340,11 @@ const AppProvider = ({ children }) => {
 
       const userPortfolio = JSON.parse(localStorage.getItem('userPortfolio') || '[]')
       console.log(userPortfolio)
+
+      let mergedData = [];
+      let totalBal = 0;
+      let tetherBal = 0;
+      let tetherQty = 0;
 
       // get coin data if user portfolio is not empty
       if(userPortfolio.length > 0) {
@@ -237,9 +361,7 @@ const AppProvider = ({ children }) => {
 
         const { data } = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
 
-        let mergedData = [];
-        let totalBal = 0;
-        let tetherBal = 0;
+        
 
         for (let i=0; i<userPortfolio.length; i++) {
           const coinData = data.find(coin => coin.id === userPortfolio[i].coinId)
@@ -259,18 +381,21 @@ const AppProvider = ({ children }) => {
           
           if(userPortfolio[i].coinId === 'tether') {
             tetherBal = obj.current_balance
+            tetherQty = obj.qty
           }
         }
 
-        dispatch({
-          type: GET_PORTFOLIO_SUCCESS,
-          payload: {
-            portfolioMarketData: mergedData,
-            portfolioBalance: totalBal,
-            tetherBalance: tetherBal
-          }
-        })
       }
+
+      dispatch({
+        type: GET_PORTFOLIO_SUCCESS,
+        payload: {
+          portfolioMarketData: mergedData,
+          portfolioBalance: totalBal,
+          tetherBalance: tetherBal,
+          tetherQty: tetherQty
+        }
+      })
 
 
     } catch (error) {
@@ -293,6 +418,9 @@ const AppProvider = ({ children }) => {
           getCoinsData,
           getCoinData,
           buyCoin,
+          sellCoin,
+          depositTether,
+          withdrawTether,
           getPortfolio
         }
       }
